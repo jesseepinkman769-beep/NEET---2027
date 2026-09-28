@@ -1,37 +1,1527 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#183447"><title>My Vault • NEET 2027</title>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#183447">
+<title>My Vault • NEET 2027</title>
+
 <style>
-:root{--ink:#183447;--muted:#71818a;--line:#dbe4e3;--bg:#f3f6f4;--paper:#fff;--soft:#edf3f1;--accent:#68857d;--danger:#a65d5d;--good:#477568}
-*{box-sizing:border-box}body{margin:0;padding:12px;background:linear-gradient(135deg,#f2f6f4,#fbfcfa 50%,#edf4f4);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.app{max-width:1100px;margin:auto}.shell{background:#ffffffed;border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 15px 45px rgba(31,50,60,.08)}header{padding:22px 24px 16px;border-bottom:1px solid var(--line)}.eyebrow{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:#607782}.brand{font:500 34px Georgia,serif;letter-spacing:.08em;margin:5px 0}.sub{font-size:11px;color:var(--muted);letter-spacing:.13em;text-transform:uppercase}.toolbar{padding:14px 18px;background:#f5f8f7;border-bottom:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap;align-items:center}.btn,input,select{border:1px solid #d5e0de;background:#fff;color:#365766;border-radius:10px;padding:10px 12px;font:inherit;font-size:11px}.btn{cursor:pointer}.btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}.btn.danger{color:var(--danger)}.account{margin-left:auto;font-size:10px;color:var(--muted)}main{padding:18px}.status{padding:12px;border:1px dashed #cfd9d7;border-radius:12px;font-size:11px;line-height:1.5;margin-bottom:14px}.status.ok{background:#e8f2ee;color:var(--good)}.status.warn{background:#fff8e8;color:#806b3c}.status.err{background:#fff0f0;color:#8b5050}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.card{border:1px solid var(--line);border-radius:14px;background:#fff;padding:15px}.card h3{font-size:12px;margin:0 0 8px;overflow-wrap:anywhere}.meta{font-size:9px;color:var(--muted);line-height:1.6}.actions{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}.empty{padding:30px 10px;text-align:center;color:var(--muted);font-size:11px;border:1px dashed var(--line);border-radius:14px}.hidden{display:none!important}.toprow{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:12px}.toprow h2{font-size:13px;letter-spacing:.16em;text-transform:uppercase;margin:0}.search{width:230px}.connect{max-width:560px;margin:20px auto;padding:22px;border:1px solid var(--line);border-radius:16px;background:#fff}.connect h2{font:500 25px Georgia,serif;margin:0 0 8px}.connect p{font-size:10px;color:var(--muted);line-height:1.6}.connect .btn{margin-top:8px}.tiny{font-size:9px;color:var(--muted);margin-top:10px}.back{margin-top:15px;font-size:10px;color:var(--muted)}a{color:inherit;text-decoration:none}@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){body{padding:0}.shell{border-radius:0;min-height:100vh}.brand{font-size:28px}.grid{grid-template-columns:1fr}.search{width:100%}main{padding:12px}.account{width:100%;margin-left:0}}
-</style></head><body><div class="app"><div class="shell">
-<header><div class="eyebrow">NEET 2027 / GOOGLE DRIVE VAULT</div><div class="brand">MY DOCUMENTS</div><div class="sub">Tests · Mistake Notebook · Analysis · Study PDFs</div></header>
-<div class="toolbar"><button class="btn" id="backBtn">← Dashboard</button><span class="account" id="account"></span><button class="btn hidden" id="disconnectBtn">Disconnect</button></div>
+:root{
+  --ink:#183447;
+  --muted:#71818a;
+  --line:#dbe4e3;
+  --bg:#f3f6f4;
+  --paper:#fff;
+  --soft:#edf3f1;
+  --accent:#68857d;
+  --danger:#a65d5d;
+  --good:#477568
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  padding:12px;
+  background:linear-gradient(135deg,#f2f6f4,#fbfcfa 50%,#edf4f4);
+  color:var(--ink);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+}
+
+.app{max-width:1100px;margin:auto}
+
+.shell{
+  background:#ffffffed;
+  border:1px solid var(--line);
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 15px 45px rgba(31,50,60,.08)
+}
+
+header{
+  padding:22px 24px 16px;
+  border-bottom:1px solid var(--line)
+}
+
+.eyebrow{
+  font-size:10px;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:#607782
+}
+
+.brand{
+  font:500 34px Georgia,serif;
+  letter-spacing:.08em;
+  margin:5px 0
+}
+
+.sub{
+  font-size:11px;
+  color:var(--muted);
+  letter-spacing:.13em;
+  text-transform:uppercase
+}
+
+.toolbar{
+  padding:14px 18px;
+  background:#f5f8f7;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center
+}
+
+.btn,input,select{
+  border:1px solid #d5e0de;
+  background:#fff;
+  color:#365766;
+  border-radius:10px;
+  padding:10px 12px;
+  font:inherit;
+  font-size:11px
+}
+
+.btn{cursor:pointer}
+
+.btn.primary{
+  background:var(--ink);
+  color:#fff;
+  border-color:var(--ink)
+}
+
+.btn.danger{color:var(--danger)}
+
+.account{
+  margin-left:auto;
+  font-size:10px;
+  color:var(--muted)
+}
+
+main{padding:18px}
+
+.status{
+  padding:12px;
+  border:1px dashed #cfd9d7;
+  border-radius:12px;
+  font-size:11px;
+  line-height:1.5;
+  margin-bottom:14px
+}
+
+.status.ok{
+  background:#e8f2ee;
+  color:var(--good)
+}
+
+.status.warn{
+  background:#fff8e8;
+  color:#806b3c
+}
+
+.status.err{
+  background:#fff0f0;
+  color:#8b5050
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px
+}
+
+.card{
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#fff;
+  padding:15px
+}
+
+.card h3{
+  font-size:12px;
+  margin:0 0 8px;
+  overflow-wrap:anywhere
+}
+
+.meta{
+  font-size:9px;
+  color:var(--muted);
+  line-height:1.6
+}
+
+.actions{
+  display:flex;
+  gap:7px;
+  margin-top:11px;
+  flex-wrap:wrap
+}
+
+.empty{
+  padding:30px 10px;
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+  border:1px dashed var(--line);
+  border-radius:14px
+}
+
+.hidden{display:none!important}
+
+.toprow{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center;
+  margin-bottom:12px
+}
+
+.toprow h2{
+  font-size:13px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  margin:0
+}
+
+.search{
+  width:230px
+}
+
+.connect{
+  max-width:560px;
+  margin:20px auto;
+  padding:22px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fff
+}
+
+.connect h2{
+  font:500 25px Georgia,serif;
+  margin:0 0 8px
+}
+
+.connect p{
+  font-size:10px;
+  color:var(--muted);
+  line-height:1.6
+}
+
+.connect .btn{margin-top:8px}
+
+.tiny{
+  font-size:9px;
+  color:var(--muted);
+  margin-top:10px
+}
+
+.back{
+  margin-top:15px;
+  font-size:10px;
+  color:var(--muted)
+}
+
+a{
+  color:inherit;
+  text-decoration:none
+}
+
+@media(max-width:800px){
+  .grid{
+    grid-template-columns:repeat(2,1fr)
+  }
+}
+
+@media(max-width:560px){
+  body{padding:0}
+
+  .shell{
+    border-radius:0;
+    min-height:100vh
+  }
+
+  .brand{
+    font-size:28px
+  }
+
+  .grid{
+    grid-template-columns:1fr
+  }
+
+  .search{
+    width:100%
+  }
+
+  main{
+    padding:12px
+  }
+
+  .account{
+    width:100%;
+    margin-left:0
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+<div class="shell">
+
+<header>
+  <div class="eyebrow">NEET 2027 / GOOGLE DRIVE VAULT</div>
+  <div class="brand">MY DOCUMENTS</div>
+  <div class="sub">Tests · Mistake Notebook · Analysis · Study PDFs</div>
+</header>
+
+<div class="toolbar">
+
+  <button class="btn" id="backBtn">
+    ← Dashboard
+  </button>
+
+  <span class="account" id="account"></span>
+
+  <button class="btn hidden" id="disconnectBtn">
+    Disconnect
+  </button>
+
+</div>
+
 <main>
-<div id="status" class="status warn">Checking Google Drive connection…</div>
-<section id="connectBox" class="connect hidden"><h2>Private Google Drive Vault</h2><p>Your PDFs will stay in <b>your Google Drive</b>, not in this website's browser. Connect the Google account you want to use for your NEET documents. The website requests permission only to create and manage files made by this app.</p><button class="btn primary" id="connectBtn">Connect Google Drive</button><div class="tiny">You will see Google's own permission screen. Never enter your Google password into this website.</div></section>
-<section id="vaultBox" class="hidden"><div class="toolbar" style="margin:0 -18px 18px;border-top:1px solid var(--line)"><button class="btn primary" id="uploadBtn">＋ Add PDF</button><select id="category"><option value="Tests">Tests</option><option value="Mistake Notebook">Mistake Notebook</option><option value="Test Analysis">Test Analysis</option><option value="Other Study PDFs"> Other Study PDFs</option></select><input id="file" class="hidden" type="file" accept="application/pdf,.pdf"><input class="search" id="search" placeholder="Search documents…"></div><div class="toprow"><h2>All Documents</h2></div><div id="grid" class="grid"></div><div id="empty" class="empty">No PDFs yet. Tap <b>＋ Add PDF</b> to add your first document.</div></section>
-<div class="back">Storage is your Google Drive. The website does not store your PDFs locally. You can use the same Google account on another device and access the same vault.</div>
-</main></div></div>
-<script src="https://accounts.google.com/gsi/client"></script><script src="vault-config.js"></script>
+
+<div id="status" class="status warn">
+  Checking Google Drive connection…
+</div>
+
+<section id="connectBox" class="connect hidden">
+
+  <h2>Private Google Drive Vault</h2>
+
+  <p>
+    Your PDFs will stay in <b>your Google Drive</b>, not in this website's browser.
+    Connect the Google account you want to use for your NEET documents.
+    The website requests permission only to create and manage files made by this app.
+  </p>
+
+  <button class="btn primary" id="connectBtn">
+    Connect Google Drive
+  </button>
+
+  <div class="tiny">
+    You will see Google's own permission screen.
+    Never enter your Google password into this website.
+  </div>
+
+</section>
+
+<section id="vaultBox" class="hidden">
+
+  <div
+    class="toolbar"
+    style="margin:0 -18px 18px;border-top:1px solid var(--line)"
+  >
+
+    <button class="btn primary" id="uploadBtn">
+      ＋ Add PDF
+    </button>
+
+    <select id="category">
+
+      <option value="Tests">
+        Tests
+      </option>
+
+      <option value="Mistake Notebook">
+        Mistake Notebook
+      </option>
+
+      <option value="Test Analysis">
+        Test Analysis
+      </option>
+
+      <option value="Other Study PDFs">
+        Other Study PDFs
+      </option>
+
+      <option value="Extra">
+        Extra
+      </option>
+
+    </select>
+
+    <input
+      id="file"
+      class="hidden"
+      type="file"
+      accept="application/pdf,.pdf"
+    >
+
+    <input
+      class="search"
+      id="search"
+      placeholder="Search documents…"
+    >
+
+  </div>
+
+  <div class="toprow">
+    <h2 id="categoryTitle">
+      Tests
+    </h2>
+  </div>
+
+  <div id="grid" class="grid"></div>
+
+  <div id="empty" class="empty">
+    No PDFs in this category yet.
+    Tap <b>＋ Add PDF</b> to add one.
+  </div>
+
+</section>
+
+<div class="back">
+  Storage is your Google Drive.
+  The website does not store your PDFs locally.
+  You can use the same Google account on another device
+  and access the same vault.
+</div>
+
+</main>
+
+</div>
+</div>
+
+
+<script src="https://accounts.google.com/gsi/client"></script>
+<script src="vault-config.js"></script>
+
 <script>
-const SCOPES='https://www.googleapis.com/auth/drive.file';
-const statusEl=document.getElementById('status'),connectBox=document.getElementById('connectBox'),vaultBox=document.getElementById('vaultBox'),grid=document.getElementById('grid'),empty=document.getElementById('empty'),account=document.getElementById('account'),disconnectBtn=document.getElementById('disconnectBtn'),search=document.getElementById('search');
-let tokenClient=null,accessToken=null,folderId=null,docs=[];
-const configured=window.GOOGLE_CLIENT_ID&&!window.GOOGLE_CLIENT_ID.includes('PASTE_');
-function status(msg,type='warn'){statusEl.className='status '+type;statusEl.innerHTML=msg}
-function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-function size(n){n=Number(n)||0;return n<1024*1024?(n/1024).toFixed(0)+' KB':(n/1024/1024).toFixed(1)+' MB'}
-function render(){const q=search.value.trim().toLowerCase();const list=docs.filter(d=>!q||d.name.toLowerCase().includes(q)||d.category.toLowerCase().includes(q));grid.innerHTML='';empty.classList.toggle('hidden',!!list.length);list.forEach(d=>{const el=document.createElement('div');el.className='card';el.innerHTML=`<h3>${esc(d.name)}</h3><div class="meta">${esc(d.category)} · ${new Date(d.createdTime).toLocaleDateString('en-IN')} · ${size(d.size)}</div><div class="actions"><button class="btn" data-open="${esc(d.id)}">Open PDF</button><button class="btn danger" data-del="${esc(d.id)}">Delete</button></div>`;el.querySelector('[data-open]').onclick=()=>openDoc(d);el.querySelector('[data-del]').onclick=()=>deleteDoc(d);grid.appendChild(el)})}
-async function api(url,options={}){options.headers={...(options.headers||{}),Authorization:'Bearer '+accessToken};const r=await fetch(url,options);if(!r.ok){let msg='Google Drive request failed ('+r.status+')';try{const j=await r.json();msg=j.error?.message||msg}catch{}throw new Error(msg)}return r.status===204?null:r.json()}
-async function getFolder(){if(folderId)return folderId;const q=encodeURIComponent("name = 'NEET 2027 Vault' and mimeType = 'application/vnd.google-apps.folder' and trashed = false");const r=await api('https://www.googleapis.com/drive/v3/files?q='+q+'&spaces=drive&fields=files(id,name)');if(r.files?.length){folderId=r.files[0].id;return folderId}const created=await api('https://www.googleapis.com/drive/v3/files?fields=id,name',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:'NEET 2027 Vault',mimeType:'application/vnd.google-apps.folder'})});folderId=created.id;return folderId}
-async function loadDocs(){const fid=await getFolder();const q=encodeURIComponent("'"+fid+"' in parents and trashed = false and mimeType = 'application/pdf'");const r=await api('https://www.googleapis.com/drive/v3/files?q='+q+'&orderBy=createdTime desc&fields=files(id,name,size,createdTime,webViewLink,description)');docs=(r.files||[]).map(x=>{let category='Other Study PDFs';try{const m=JSON.parse(x.description||'{}');category=m.category||category}catch{}return {...x,category}});render()}
-function showVault(){connectBox.classList.add('hidden');vaultBox.classList.remove('hidden');disconnectBtn.classList.remove('hidden');account.textContent='Google Drive connected';status('<b>Google Drive connected.</b><br>Your PDFs are stored in your Google Drive inside <b>NEET 2027 Vault</b>.','ok');loadDocs().catch(e=>status('<b>Could not load your vault.</b><br>'+esc(e.message),'err'))}
-function connect(){tokenClient.requestAccessToken({prompt:''})}
-async function openDoc(d){window.open('https://drive.google.com/file/d/'+encodeURIComponent(d.id)+'/view','_blank','noopener')}
-async function deleteDoc(d){if(!confirm('Delete this PDF from your Google Drive vault?'))return;try{await api('https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(d.id),{method:'DELETE'});await loadDocs()}catch(e){alert(e.message)}}
-async function upload(file){if(file.type!=='application/pdf'){alert('Please select a PDF.');return}if(file.size>100*1024*1024){alert('For a smooth browser upload, keep each PDF under 100 MB.');return}const name=prompt('Document name:',file.name.replace(/\.pdf$/i,''));if(!name)return;const category=document.getElementById('category').value;status('<b>Uploading…</b><br>Keep this tab open until it finishes.','ok');try{const fid=await getFolder();const metadata={name:name+'.pdf',parents:[fid],mimeType:'application/pdf',description:JSON.stringify({category})};const boundary='-------neetBoundary'+crypto.randomUUID();const body=new Blob(['--'+boundary+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n',JSON.stringify(metadata),'\r\n--'+boundary+'\r\nContent-Type: application/pdf\r\n\r\n',file,'\r\n--'+boundary+'--']);await api('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,size,createdTime,description',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+boundary},body});await loadDocs();status('<b>PDF saved.</b><br>It is now in your Google Drive vault.','ok')}catch(e){status('<b>Upload failed.</b><br>'+esc(e.message),'err')}}
-function init(){if(!configured){status('<b>One-time Google Drive setup needed.</b><br>First create a Google OAuth Web client and paste its client ID into <code>vault-config.js</code>.','warn');return}if(!window.google?.accounts?.oauth2){status('<b>Google sign-in could not load.</b><br>Check your internet connection and reload.','err');return}tokenClient=google.accounts.oauth2.initTokenClient({client_id:window.GOOGLE_CLIENT_ID,scope:SCOPES,callback:async(resp)=>{if(resp.error){status('<b>Google connection failed.</b><br>'+esc(resp.error_description||resp.error),'err');return}accessToken=resp.access_token;showVault()}});connectBox.classList.remove('hidden');status('<b>Ready to connect.</b><br>Tap Connect Google Drive and choose the account you want to use.','ok')}
-document.getElementById('backBtn').onclick=()=>location.href='index.html';document.getElementById('connectBtn').onclick=connect;disconnectBtn.onclick=()=>{if(accessToken&&window.google?.accounts?.oauth2){google.accounts.oauth2.revoke(accessToken,()=>{accessToken=null;folderId=null;docs=[];vaultBox.classList.add('hidden');disconnectBtn.classList.add('hidden');connectBox.classList.remove('hidden');account.textContent='';render();status('<b>Disconnected.</b><br>You can reconnect any time.','ok')})}};document.getElementById('uploadBtn').onclick=()=>document.getElementById('file').click();document.getElementById('file').onchange=e=>{const f=e.target.files[0];e.target.value='';if(f)upload(f)};search.oninput=render;init();
-</script></body></html>
+
+const SCOPES =
+  'https://www.googleapis.com/auth/drive.file';
+
+const statusEl =
+  document.getElementById('status');
+
+const connectBox =
+  document.getElementById('connectBox');
+
+const vaultBox =
+  document.getElementById('vaultBox');
+
+const grid =
+  document.getElementById('grid');
+
+const empty =
+  document.getElementById('empty');
+
+const account =
+  document.getElementById('account');
+
+const disconnectBtn =
+  document.getElementById('disconnectBtn');
+
+const search =
+  document.getElementById('search');
+
+const categorySelect =
+  document.getElementById('category');
+
+const categoryTitle =
+  document.getElementById('categoryTitle');
+
+
+let tokenClient = null;
+let accessToken = null;
+let folderId = null;
+let docs = [];
+
+
+/* =========================
+   GOOGLE CLIENT CHECK
+   ========================= */
+
+const configured =
+  window.GOOGLE_CLIENT_ID &&
+  !window.GOOGLE_CLIENT_ID.includes('PASTE_');
+
+
+/* =========================
+   STATUS
+   ========================= */
+
+function status(msg,type='warn'){
+
+  statusEl.className =
+    'status ' + type;
+
+  statusEl.innerHTML =
+    msg;
+}
+
+
+/* =========================
+   HTML ESCAPE
+   ========================= */
+
+function esc(s){
+
+  return String(s ?? '').replace(
+    /[&<>'"]/g,
+    c => ({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      "'":'&#39;',
+      '"':'&quot;'
+    }[c])
+  );
+}
+
+
+/* =========================
+   FILE SIZE
+   ========================= */
+
+function size(n){
+
+  n = Number(n) || 0;
+
+  return n < 1024 * 1024
+
+    ? (n / 1024).toFixed(0) + ' KB'
+
+    : (n / 1024 / 1024).toFixed(1) + ' MB';
+}
+
+
+/* =========================
+   RENDER SELECTED CATEGORY
+   ========================= */
+
+function render(){
+
+  const selectedCategory =
+    categorySelect.value;
+
+  const q =
+    search.value.trim().toLowerCase();
+
+
+  /*
+   * IMPORTANT:
+   * First filter by selected category.
+   * Then apply search inside that category.
+   */
+
+  const list =
+    docs.filter(d => {
+
+      const sameCategory =
+        d.category === selectedCategory;
+
+      const matchesSearch =
+        !q ||
+        d.name.toLowerCase().includes(q);
+
+      return sameCategory &&
+             matchesSearch;
+    });
+
+
+  grid.innerHTML = '';
+
+
+  categoryTitle.textContent =
+    selectedCategory;
+
+
+  empty.classList.toggle(
+    'hidden',
+    !!list.length
+  );
+
+
+  if(!list.length)
+    return;
+
+
+  list.forEach(d => {
+
+    const el =
+      document.createElement('div');
+
+    el.className =
+      'card';
+
+
+    el.innerHTML = `
+
+      <h3>
+        ${esc(d.name)}
+      </h3>
+
+      <div class="meta">
+
+        ${esc(d.category)}
+
+        ·
+
+        ${new Date(
+          d.createdTime
+        ).toLocaleDateString('en-IN')}
+
+        ·
+
+        ${size(d.size)}
+
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="btn"
+          data-open="${esc(d.id)}">
+          Open PDF
+        </button>
+
+        <button
+          class="btn danger"
+          data-del="${esc(d.id)}">
+          Delete
+        </button>
+
+      </div>
+    `;
+
+
+    el.querySelector(
+      '[data-open]'
+    ).onclick =
+      () => openDoc(d);
+
+
+    el.querySelector(
+      '[data-del]'
+    ).onclick =
+      () => deleteDoc(d);
+
+
+    grid.appendChild(el);
+
+  });
+}
+
+
+/* =========================
+   GOOGLE DRIVE API
+   ========================= */
+
+async function api(url,options={}){
+
+  options.headers = {
+
+    ...(options.headers || {}),
+
+    Authorization:
+      'Bearer ' + accessToken
+
+  };
+
+
+  let r =
+    await fetch(
+      url,
+      options
+    );
+
+
+  /*
+   * Token expired.
+   * Try to silently obtain a new one.
+   */
+
+  if(r.status === 401){
+
+    await refreshTokenSilently();
+
+
+    options.headers = {
+
+      ...(options.headers || {}),
+
+      Authorization:
+        'Bearer ' + accessToken
+
+    };
+
+
+    r =
+      await fetch(
+        url,
+        options
+      );
+  }
+
+
+  if(!r.ok){
+
+    let msg =
+      'Google Drive request failed (' +
+      r.status +
+      ')';
+
+
+    try{
+
+      const j =
+        await r.json();
+
+      msg =
+        j.error?.message ||
+        msg;
+
+    }catch{}
+
+
+    throw new Error(msg);
+  }
+
+
+  return r.status === 204
+    ? null
+    : r.json();
+}
+
+
+/* =========================
+   SILENT TOKEN REFRESH
+   ========================= */
+
+function refreshTokenSilently(){
+
+  return new Promise(
+    (resolve,reject)=>{
+
+      if(!tokenClient){
+
+        reject(
+          new Error(
+            'Google authentication is not ready.'
+          )
+        );
+
+        return;
+      }
+
+
+      tokenClient.requestAccessToken({
+        prompt:'none'
+      });
+
+
+      /*
+       * The normal callback below
+       * handles the new token.
+       *
+       * If Google refuses silent access,
+       * user will be asked to connect normally.
+       */
+
+      const check =
+        setInterval(()=>{
+
+          if(accessToken){
+
+            clearInterval(check);
+
+            resolve(
+              accessToken
+            );
+          }
+
+        },100);
+
+
+      setTimeout(()=>{
+
+        clearInterval(check);
+
+        if(!accessToken){
+
+          reject(
+            new Error(
+              'Google Drive authorization is required.'
+            )
+          );
+
+        }
+
+      },10000);
+
+    }
+  );
+}
+
+
+/* =========================
+   GET / CREATE VAULT FOLDER
+   ========================= */
+
+async function getFolder(){
+
+  if(folderId)
+    return folderId;
+
+
+  const q =
+    encodeURIComponent(
+      "name = 'NEET 2027 Vault' " +
+      "and mimeType = 'application/vnd.google-apps.folder' " +
+      "and trashed = false"
+    );
+
+
+  const r =
+    await api(
+      'https://www.googleapis.com/drive/v3/files?q=' +
+      q +
+      '&spaces=drive&fields=files(id,name)'
+    );
+
+
+  if(r.files?.length){
+
+    folderId =
+      r.files[0].id;
+
+    return folderId;
+  }
+
+
+  const created =
+    await api(
+      'https://www.googleapis.com/drive/v3/files?fields=id,name',
+      {
+
+        method:'POST',
+
+        headers:{
+          'Content-Type':
+            'application/json'
+        },
+
+        body:JSON.stringify({
+
+          name:
+            'NEET 2027 Vault',
+
+          mimeType:
+            'application/vnd.google-apps.folder'
+
+        })
+
+      }
+    );
+
+
+  folderId =
+    created.id;
+
+  return folderId;
+}
+
+
+/* =========================
+   LOAD DOCUMENTS
+   ========================= */
+
+async function loadDocs(){
+
+  const fid =
+    await getFolder();
+
+
+  const q =
+    encodeURIComponent(
+      "'" +
+      fid +
+      "' in parents " +
+      "and trashed = false " +
+      "and mimeType = 'application/pdf'"
+    );
+
+
+  const r =
+    await api(
+      'https://www.googleapis.com/drive/v3/files?q=' +
+      q +
+      '&orderBy=createdTime desc' +
+      '&fields=files(id,name,size,createdTime,webViewLink,description)'
+    );
+
+
+  docs =
+    (r.files || []).map(x => {
+
+      let category =
+        'Other Study PDFs';
+
+
+      try{
+
+        const m =
+          JSON.parse(
+            x.description || '{}'
+          );
+
+
+        category =
+          m.category ||
+          category;
+
+      }catch{}
+
+
+      return {
+        ...x,
+        category
+      };
+
+    });
+
+
+  render();
+}
+
+
+/* =========================
+   SHOW VAULT
+   ========================= */
+
+async function showVault(){
+
+  connectBox.classList.add(
+    'hidden'
+  );
+
+  vaultBox.classList.remove(
+    'hidden'
+  );
+
+  disconnectBtn.classList.remove(
+    'hidden'
+  );
+
+  account.textContent =
+    'Google Drive connected';
+
+
+  status(
+    '<b>Google Drive connected.</b><br>' +
+    'Your PDFs are stored in your Google Drive inside ' +
+    '<b>NEET 2027 Vault</b>.',
+    'ok'
+  );
+
+
+  try{
+
+    await loadDocs();
+
+  }catch(e){
+
+    status(
+      '<b>Could not load your vault.</b><br>' +
+      esc(e.message),
+      'err'
+    );
+  }
+}
+
+
+/* =========================
+   MANUAL CONNECT
+   ========================= */
+
+function connect(){
+
+  if(!tokenClient)
+    return;
+
+
+  tokenClient.requestAccessToken({
+    prompt:''
+  });
+}
+
+
+/* =========================
+   OPEN PDF
+   ========================= */
+
+async function openDoc(d){
+
+  window.open(
+
+    'https://drive.google.com/file/d/' +
+    encodeURIComponent(d.id) +
+    '/view',
+
+    '_blank',
+
+    'noopener'
+  );
+}
+
+
+/* =========================
+   DELETE PDF
+   ========================= */
+
+async function deleteDoc(d){
+
+  if(!confirm(
+    'Delete this PDF from your Google Drive vault?'
+  ))
+    return;
+
+
+  try{
+
+    await api(
+
+      'https://www.googleapis.com/drive/v3/files/' +
+      encodeURIComponent(d.id),
+
+      {
+        method:'DELETE'
+      }
+
+    );
+
+
+    await loadDocs();
+
+
+  }catch(e){
+
+    alert(
+      e.message
+    );
+  }
+}
+
+
+/* =========================
+   UPLOAD PDF
+   ========================= */
+
+async function upload(file){
+
+  if(file.type !== 'application/pdf'){
+
+    alert(
+      'Please select a PDF.'
+    );
+
+    return;
+  }
+
+
+  if(
+    file.size >
+    100 * 1024 * 1024
+  ){
+
+    alert(
+      'For a smooth browser upload, keep each PDF under 100 MB.'
+    );
+
+    return;
+  }
+
+
+  const name =
+    prompt(
+      'Document name:',
+      file.name.replace(
+        /\.pdf$/i,
+        ''
+      )
+    );
+
+
+  if(!name)
+    return;
+
+
+  /*
+   * Upload category is the currently
+   * selected category.
+   */
+
+  const category =
+    categorySelect.value;
+
+
+  status(
+    '<b>Uploading…</b><br>' +
+    'Keep this tab open until it finishes.',
+    'ok'
+  );
+
+
+  try{
+
+    const fid =
+      await getFolder();
+
+
+    const metadata = {
+
+      name:
+        name + '.pdf',
+
+      parents:[
+        fid
+      ],
+
+      mimeType:
+        'application/pdf',
+
+      description:
+        JSON.stringify({
+          category:
+            category
+        })
+
+    };
+
+
+    const boundary =
+      '-------neetBoundary' +
+      crypto.randomUUID();
+
+
+    const body =
+      new Blob(
+        [
+
+          '--' +
+          boundary +
+          '\r\n' +
+
+          'Content-Type: application/json; charset=UTF-8' +
+          '\r\n\r\n' +
+
+          JSON.stringify(
+            metadata
+          ) +
+
+          '\r\n--' +
+          boundary +
+          '\r\n' +
+
+          'Content-Type: application/pdf' +
+          '\r\n\r\n',
+
+          file,
+
+          '\r\n--' +
+          boundary +
+          '--'
+
+        ],
+        {
+          type:
+            'multipart/related; boundary=' +
+            boundary
+        }
+      );
+
+
+    await api(
+
+      'https://www.googleapis.com/upload/drive/v3/files' +
+      '?uploadType=multipart' +
+      '&fields=id,name,size,createdTime,description',
+
+      {
+
+        method:'POST',
+
+        headers:{
+          'Content-Type':
+            'multipart/related; boundary=' +
+            boundary
+        },
+
+        body:body
+
+      }
+
+    );
+
+
+    await loadDocs();
+
+
+    status(
+      '<b>PDF saved.</b><br>' +
+      'It is now in your Google Drive vault.',
+      'ok'
+    );
+
+
+  }catch(e){
+
+    status(
+      '<b>Upload failed.</b><br>' +
+      esc(e.message),
+      'err'
+    );
+  }
+}
+
+
+/* =========================
+   INITIALIZATION
+   ========================= */
+
+function init(){
+
+  if(!configured){
+
+    status(
+      '<b>Google Drive setup needed.</b><br>' +
+      'Google OAuth Client ID is missing.',
+      'warn'
+    );
+
+    return;
+  }
+
+
+  if(
+    !window.google?.accounts?.oauth2
+  ){
+
+    status(
+      '<b>Google sign-in could not load.</b><br>' +
+      'Check your internet connection and reload.',
+      'err'
+    );
+
+    return;
+  }
+
+
+  tokenClient =
+    google.accounts.oauth2.initTokenClient({
+
+      client_id:
+        window.GOOGLE_CLIENT_ID,
+
+      scope:
+        SCOPES,
+
+      callback:
+        async resp => {
+
+          if(resp.error){
+
+            accessToken =
+              null;
+
+
+            connectBox.classList.remove(
+              'hidden'
+            );
+
+
+            vaultBox.classList.add(
+              'hidden'
+            );
+
+
+            disconnectBtn.classList.add(
+              'hidden'
+            );
+
+
+            status(
+              '<b>Google Drive needs to be connected.</b><br>' +
+              'Tap Connect Google Drive once.',
+              'warn'
+            );
+
+
+            return;
+          }
+
+
+          accessToken =
+            resp.access_token;
+
+
+          await showVault();
+
+        }
+
+    });
+
+
+  /*
+   * Try to restore the existing
+   * Google authorization silently.
+   */
+
+  status(
+    '<b>Restoring Google Drive connection…</b><br>' +
+    'Please wait.',
+    'warn'
+  );
+
+
+  tokenClient.requestAccessToken({
+    prompt:'none'
+  });
+
+}
+
+
+/* =========================
+   EVENTS
+   ========================= */
+
+document.getElementById(
+  'backBtn'
+).onclick = () => {
+
+  location.href =
+    'index.html';
+};
+
+
+document.getElementById(
+  'connectBtn'
+).onclick =
+  connect;
+
+
+/*
+ * Category change:
+ * immediately show only PDFs
+ * belonging to that category.
+ */
+
+categorySelect.onchange = () => {
+
+  search.value = '';
+
+  render();
+
+};
+
+
+/*
+ * Search only works inside
+ * the selected category.
+ */
+
+search.oninput =
+  render;
+
+
+/*
+ * Add PDF.
+ * The selected category is used
+ * automatically for the upload.
+ */
+
+document.getElementById(
+  'uploadBtn'
+).onclick = () => {
+
+  document.getElementById(
+    'file'
+  ).click();
+
+};
+
+
+document.getElementById(
+  'file'
+).onchange = e => {
+
+  const f =
+    e.target.files[0];
+
+  e.target.value = '';
+
+  if(f)
+    upload(f);
+
+};
+
+
+/* =========================
+   DISCONNECT
+   ========================= */
+
+disconnectBtn.onclick = () => {
+
+  if(
+    accessToken &&
+    window.google?.accounts?.oauth2
+  ){
+
+    google.accounts.oauth2.revoke(
+      accessToken,
+      () => {
+
+        accessToken = null;
+
+        folderId = null;
+
+        docs = [];
+
+        vaultBox.classList.add(
+          'hidden'
+        );
+
+        disconnectBtn.classList.add(
+          'hidden'
+        );
+
+        connectBox.classList.remove(
+          'hidden'
+
+          connectBox.classList.remove(
+          'hidden'
+        );
+
+        status.textContent =
+          'Google Drive disconnected';
+
+      }
+    );
+
+  } else {
+
+    accessToken = null;
+
+    folderId = null;
+
+    docs = [];
+
+    vaultBox.classList.add(
+      'hidden'
+    );
+
+    disconnectBtn.classList.add(
+      'hidden'
+    );
+
+    connectBox.classList.remove(
+      'hidden'
+    );
+
+    status.textContent =
+      'Google Drive disconnected';
+
+  }
+
+};
+
+
+/* =========================
+   INITIALIZE
+   ========================= */
+
+function init(){
+
+  if(
+    !window.google ||
+    !google.accounts ||
+    !google.accounts.oauth2
+  ){
+
+    status.textContent =
+      'Google Sign-In is loading...';
+
+    setTimeout(init, 500);
+
+    return;
+  }
+
+
+  tokenClient =
+    google.accounts.oauth2.initTokenClient({
+
+      client_id:
+        CLIENT_ID,
+
+      scope:
+        SCOPES,
+
+      callback:
+        async (response) => {
+
+          if(response.error){
+
+            console.error(
+              'OAuth error:',
+              response
+            );
+
+            status.textContent =
+              'Google Drive connection failed';
+
+            return;
+          }
+
+
+          accessToken =
+            response.access_token;
+
+
+          connectBox.classList.add(
+            'hidden'
+          );
+
+          disconnectBtn.classList.remove(
+            'hidden'
+          );
+
+          await showVault();
+
+        }
+
+    });
+
+
+  /*
+   * Try silent login first.
+   * If Google session is available,
+   * Drive reconnects automatically.
+   */
+
+  tokenClient.requestAccessToken({
+    prompt: 'none'
+  });
+
+}
+
+
+init();
+
+</script>
+
+</body>
+</html>
+        
