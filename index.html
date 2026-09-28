@@ -21,40 +21,51 @@ body{padding:12px}.app{max-width:1500px;margin:auto}.shell{background:#ffffffed;
   color:#8fa9a3;
   letter-spacing:0;
 }
-
-body::after{
-  content:"♡   ·   ♡   ·   ♡";
+.heart-field{
   position:fixed;
-  left:0;
-  right:0;
-  bottom:8vh;
-  text-align:center;
-  color:#8fa9a3;
-  opacity:.08;
-  font-size:18px;
-  letter-spacing:3em;
+  inset:0;
   pointer-events:none;
-  z-index:0;
-  animation:softFloat 16s ease-in-out infinite alternate;
+  overflow:hidden;
+  z-index:20;
 }
 
-@keyframes softFloat{
-  from{transform:translateY(10px)}
-  to{transform:translateY(-18px)}
+.heart-field span{
+  position:absolute;
+  bottom:-30px;
+  color:#8fa9a3;
+  opacity:.10;
+  font-size:16px;
+  animation:heartRise linear infinite;
 }
 
-@media(prefers-reduced-motion:reduce){
-  body::after{animation:none}
+.heart-field span:nth-child(1){left:12%;animation-duration:18s;animation-delay:1s}
+.heart-field span:nth-child(2){left:30%;animation-duration:22s;animation-delay:5s;font-size:12px}
+.heart-field span:nth-child(3){left:52%;animation-duration:20s;animation-delay:2s;font-size:14px}
+.heart-field span:nth-child(4){left:73%;animation-duration:24s;animation-delay:7s;font-size:11px}
+.heart-field span:nth-child(5){left:90%;animation-duration:19s;animation-delay:4s;font-size:15px}
+
+@keyframes heartRise{
+  0%{transform:translateY(0) rotate(0deg);opacity:0}
+  15%{opacity:.10}
+  85%{opacity:.10}
+  100%{transform:translateY(-110vh) rotate(12deg);opacity:0}
 }
 
 </style>
 </style>
 </head>
 <body>
+  <div class="heart-field">
+  <span>♡</span>
+  <span>♡</span>
+  <span>♡</span>
+  <span>♡</span>
+  <span>♡</span>
+  </div>
 <div class="app"><div class="shell">
-<header class="top"><div><div class="eyebrow">NEET 2027 / PERSONAL CONTROL</div><div class="brand">SALAAR • STUDY SYSTEM</div><div class="sub">Command center · execution over intention</div></div><div class="today" id="today"></div></header>
+<header class="top"><div><div class="eyebrow">NEET 2027 / PERSONAL CONTROL</div><div class="brand">SALAAR ♡ • STUDY SYSTEM</div><div class="sub">Command center · execution over intention</div></div><div class="today" id="today"></div></header>
 <nav class="nav" id="nav">
-<button class="active" data-view="home">⌂ Dashboard</button><button data-view="daily">Daily Tracker</button><button data-view="syllabus">Syllabus</button><button data-view="biology">Biology Master Plan</button><button data-view="vault">📚 My Vault</button>
+<button class="active" data-view="home">⌂ Dashboard</button><button data-view="daily">Daily Tracker</button><button data-view="syllabus">Syllabus</button><button data-view="biology">Biology Master Plan</button><button data-view="vault">My Vault</button>
 </nav>
 <main>
 <section class="view active" id="home">
