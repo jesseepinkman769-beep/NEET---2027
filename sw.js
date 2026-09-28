@@ -1,5 +1,5 @@
-const CACHE="neet2027-v2";
-const ASSETS=["./","./index.html","./daily.html","./syllabus.html","./biology.html","./manifest.webmanifest"];
+const CACHE="neet2027-v3";
+const ASSETS=["./","./index.html","./daily.html","./syllabus.html","./biology.html","./vault.html","./vault-config.js","./manifest.webmanifest"];
 self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS))));
 self.addEventListener("activate",e=>e.waitUntil(self.clients.claim()));
 self.addEventListener("fetch",e=>{
