@@ -9,4 +9,4 @@
 
   Do NOT put a client secret here. Browser OAuth uses the client ID only.
 */
-window.GOOGLE_CLIENT_ID = 90347425341-pkus4p80ihf21scd754atan08iqcqq1v.apps.googleusercontent.com
+window.GOOGLE_CLIENT_ID = '90347425341-pkus4p80ihf21scd754atan08iqcqq1v.apps.googleusercontent.com';
