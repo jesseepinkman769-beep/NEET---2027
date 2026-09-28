@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEET 2027 — Daily Study Tracker</title>
+<style>
+:root{
+  --ink:#183447;--muted:#607482;--line:#dbe1e3;--paper:#fbfcfb;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:#f3f4f2;color:var(--ink);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  letter-spacing:.02em
+}
+.page{
+  width:min(1280px,96vw);margin:24px auto;padding:28px 32px 20px;
+  background:linear-gradient(180deg,#fff,#fafbf9);
+  border:1px solid #e6e9e7;border-radius:18px;
+  box-shadow:0 16px 45px rgba(31,50,60,.08)
+}
+.topline,.footer{
+  display:flex;justify-content:space-between;align-items:center;
+  color:#71818a;font-size:11px;letter-spacing:.28em;text-transform:uppercase
+}
+.brand{display:flex;gap:24px;align-items:flex-start;margin:14px 0 20px}
+.leaf{font-size:62px;line-height:1;color:#557e72;opacity:.8}
+.brand h1{font-family:Georgia,serif;font-size:42px;font-weight:500;letter-spacing:.08em;margin:0 0 8px;color:#193a4e}
+.brand p{font-size:12px;letter-spacing:.28em;color:#607582;margin:0}
+.header-right{margin-left:auto;min-width:430px}
+.nav{display:flex;align-items:center;justify-content:flex-end;gap:8px}
+.nav button,.datebox{
+  height:40px;border:1px solid var(--line);background:#fff;border-radius:10px;color:var(--ink)
+}
+.nav button{width:40px;font-size:20px;cursor:pointer}
+.datebox{padding:0 18px;display:flex;align-items:center;gap:12px}
+.dayline{display:flex;justify-content:flex-end;align-items:center;gap:32px;margin-top:12px;font-size:11px;letter-spacing:.18em;color:#71818a;text-transform:uppercase}
+.target-time{border:1px solid #e3e7e5;border-radius:10px;padding:8px 18px;background:#fbfcf9}
+.target-time label{font-size:9px;letter-spacing:.18em}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+.card,.panel,.stat{border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.7)}
+.card{padding:15px;min-height:82px;display:flex;align-items:center;gap:14px}
+.icon{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#eef3f1;font-size:22px;flex:none}
+.card small,.section-title,.label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#627782}
+.edit-value{
+  border:0;border-bottom:1px solid #d6dfe1;border-radius:0;background:transparent;
+  width:100px;height:32px;padding:0 2px;color:#294758;font-size:19px;outline:none
+}
+.edit-value:focus{border-bottom-color:#607b88}
+.grid{display:grid;grid-template-columns:1.35fr 1fr;gap:12px}
+.panel{overflow:hidden}
+.panel-head{padding:14px 18px;border-bottom:1px solid #e4e8e8;display:flex;align-items:center;gap:12px}
+.panel-head h2{font-size:13px;letter-spacing:.2em;text-transform:uppercase;margin:0;font-weight:600}
+.panel-head .add{
+  margin-left:auto;border:0;background:#edf2ef;border-radius:50%;
+  width:30px;height:30px;cursor:pointer;color:#24485d;font-size:18px
+}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px 12px;border-bottom:1px solid #e7ebeb;text-align:left;font-size:12px}
+th{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#6c7e87;font-weight:600}
+input,select{
+  width:100%;border:1px solid #e2e6e6;border-radius:8px;background:#fff;
+  height:36px;padding:0 10px;color:#304c5b;outline:none
+}
+input:focus,select:focus{border-color:#9fb1ba;box-shadow:0 0 0 3px #edf2f3}
+.check{width:18px;height:18px;accent-color:#355b6d}
+.subject{font-weight:600;letter-spacing:.12em;font-size:10px;white-space:nowrap}
+.subject i{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;font-style:normal;margin-right:7px;background:#eef4f2}
+.target-table th:last-child,.target-table td:last-child{text-align:center;width:70px}
+.target-table th:first-child{width:135px}
+.target-table .remove{
+  border:0;background:transparent;color:#9a6d6d;cursor:pointer;font-size:15px;margin-left:4px
+}
+.log-table th:first-child{width:105px;min-width:105px}
+.log-table th:nth-child(2){width:58%}
+.log-table th:last-child{width:95px}
+.log-table td:first-child input{min-width:100px}.log-table td:nth-child(2) input{min-width:160px}
+.lower{display:grid;grid-template-columns:180px 1fr;gap:10px;margin-top:12px}
+.stat{padding:16px;min-height:115px}
+.stat h3{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#667a84;font-weight:500;margin:0 0 14px}
+.big{font-size:25px;color:#27495a}
+.split{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.split>div{min-width:0}
+.split span{display:block;color:#71818a;font-size:9px;letter-spacing:.12em;text-transform:uppercase}
+.split input{margin-top:7px;font-size:17px;height:38px}
+.questions .split{grid-template-columns:repeat(3,1fr)}
+.subject-tracker{margin-top:12px}
+.tracker-row{
+  display:grid;grid-template-columns:2fr repeat(3,1fr);margin:8px 16px;
+  border:1px solid #e2e7e7;border-radius:10px;overflow:hidden
+}
+.tracker-row>div{
+  padding:12px;border-right:1px solid #e2e7e7;font-size:11px;
+  display:flex;align-items:center;justify-content:center;gap:12px
+}
+.tracker-row>div:last-child{border-right:0}
+.tracker-row>div:first-child{justify-content:flex-start;font-weight:600;letter-spacing:.18em}
+.physics{background:#edf4fa}.biology{background:#eff6f0}.chemistry{background:#f5f0fa}
+.footer{margin-top:18px;border-top:1px solid #e0e4e4;padding-top:12px}
+.empty-note{font-size:10px;color:#809098;padding:8px 12px 0}
+@media(max-width:900px){
+ .header-right{min-width:0}.brand{flex-wrap:wrap}.grid{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+ .page{padding:18px}.cards,.lower{grid-template-columns:1fr}.header-right{width:100%}
+ .brand h1{font-size:30px}.topline,.footer{font-size:8px}
+ .tracker-row{grid-template-columns:1.5fr repeat(3,1fr);margin:6px}
+ .tracker-row>div{padding:9px 5px;font-size:9px}
+ .split{grid-template-columns:1fr}
+ .questions .split{grid-template-columns:1fr}
+}
+
+/* PRINT / SHARE */
+.print-only{display:none}
+@media print{
+  @page{size:A4 portrait;margin:6mm}
+  html,body{background:#fff!important;margin:0!important;padding:0!important}
+  body{overflow:visible!important;font-size:9px!important}
+  .page{width:100%!important;margin:0!important;padding:7mm 7mm 5mm!important;background:#fff!important;border:0!important;box-shadow:none!important;border-radius:0!important}
+  .topline{font-size:7px}
+  .brand{margin:7px 0 9px;gap:12px}
+  .leaf{font-size:38px}
+  .brand h1{font-size:27px;margin-bottom:3px}
+  .brand p{font-size:8px}
+  .header-right{min-width:0}
+  .nav{gap:5px}
+  .nav button,.datebox{display:flex!important;height:29px}
+  .nav button{width:29px;font-size:14px}
+  .datebox{padding:0 8px;gap:6px}
+  .datebox input{width:100px!important}
+  .nav button[title="Reset this day's entire tracker"]{display:none!important}
+  .dayline{margin-top:6px;gap:12px;font-size:8px}
+  .target-time{padding:4px 8px}
+  .target-time label{font-size:6px}
+  .cards{gap:5px;margin:6px 0}
+  .card{padding:7px;min-height:50px;gap:7px}
+  .icon{width:26px;height:26px;font-size:14px}
+  .card small,.section-title,.label{font-size:7px}
+  .edit-value{height:21px;font-size:12px}
+  .grid{gap:6px}
+  .panel-head{padding:7px 9px}
+  .panel-head h2{font-size:9px}
+  th,td{padding:5px 6px;font-size:8px}
+  th{font-size:6.5px}
+  input,select{height:25px;padding:0 5px;font-size:8px}
+  .log-table th:first-child{width:105px;min-width:105px}
+  .log-table td:first-child input{min-width:100px}
+  .log-table th:nth-child(2){width:auto}
+  .log-table th:last-child{width:78px}
+  .log-table td:nth-child(2) input{min-width:120px}
+  .lower{gap:6px;margin-top:6px}
+  .stat{padding:8px;min-height:67px}
+  .stat h3{font-size:7px;margin-bottom:6px}
+  .big{font-size:17px}
+  .split{gap:6px}
+  .split input{margin-top:3px;font-size:11px;height:25px}
+  .subject-tracker{margin-top:6px}
+  .tracker-row{margin:4px 8px}
+  .tracker-row>div{padding:6px;font-size:8px}
+  .share-actions,.empty-note,.footer,.add,.remove{display:none!important}
+  input,select{border:0!important;background:transparent!important;box-shadow:none!important}
+  .panel,.card,.stat,.tracker-row{break-inside:avoid;page-break-inside:avoid}
+  .grid,.lower,.subject-tracker{break-inside:avoid;page-break-inside:avoid}
+}
+.share-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+.action-btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 13px;color:var(--ink);cursor:pointer;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.action-btn:hover{background:#f4f7f6}
+
+</style>
+</head>
+
+<body data-tracker-version="3">
+<div class="page">
+  <div class="topline">
+    <span>NEET 2027 &nbsp;/&nbsp; DAILY CONTROL</span>
+    <span>SMALL STEPS. BIG RESULTS.</span>
+  </div>
+
+  <div class="brand">
+    <div class="leaf">❧</div>
+    <div>
+      <h1>DAILY STUDY TRACKER</h1>
+      <p>SMALL STEPS. BIG RESULTS.</p>
+    </div>
+    <div class="header-right">
+      <div class="nav">
+        <button onclick="changeDay(-1)" title="Previous day">←</button>
+        <button onclick="goToday()" title="Go to today" style="width:auto;padding:0 12px;font-size:11px;letter-spacing:.08em">TODAY</button>
+        <div class="datebox">▣ <input id="date" type="date" style="border:0;height:28px;padding:0;width:125px"></div>
+        <button onclick="changeDay(1)" title="Next day">→</button>
+        <button onclick="resetAll()" title="Reset this day's entire tracker" aria-label="Reset this day's entire tracker" style="width:auto;padding:0 10px;font-size:11px;letter-spacing:.08em">↻ RESET</button>
+      </div>
+      <div class="dayline">
+        <span>DAY <b id="dayNo">01</b> / 220</span>
+        <div class="target-time">
+          <label>TODAY'S TARGET</label><br>
+          <input id="todayTarget" class="edit-value" value="08:00" aria-label="Today's target">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Editable daily summary -->
+  <div class="cards">
+    <div class="card">
+      <div class="icon">☼</div>
+      <div><small>Wake</small><div><input id="wake" class="edit-value" value="— : —" aria-label="Wake time"></div></div>
+    </div>
+    <div class="card">
+      <div class="icon">☾</div>
+      <div><small>Sleep</small><div><input id="sleep" class="edit-value" value="— : —" aria-label="Sleep time"></div></div>
+    </div>
+    <div class="card">
+      <div class="icon">▣</div>
+      <div><small>Total Study</small><div><input id="totalStudy" class="edit-value" value="— : —" aria-label="Total study time"></div></div>
+    </div>
+    <div class="card">
+      <div class="icon">◎</div>
+      <div><small>Progress</small><div class="value" id="progressTop">0 %</div></div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- TODAY'S TARGET -->
+    <div class="panel">
+      <div class="panel-head">
+        <span>◎</span><h2>Today's Target</h2>
+        
+        <button class="add" onclick="addTask()" title="Add task" aria-label="Add task">+</button>
+      </div>
+      <table class="target-table">
+        <thead><tr><th>Subject</th><th>Task</th><th>Done</th><th></th></tr></thead>
+        <tbody id="taskBody"></tbody>
+      </table>
+      <div class="empty-note">Add as many daily tasks as you need. Task count and completion update automatically.</div>
+    </div>
+
+    <!-- STUDY LOG -->
+    <div class="panel">
+      <div class="panel-head">
+        <span>◷</span><h2>Study Log</h2>
+        <button class="add" onclick="addLogRow()" title="Add study log">+</button>
+      </div>
+      <table class="log-table" id="log">
+        <thead><tr><th>Time</th><th>Activity</th><th>Duration</th></tr></thead>
+        <tbody id="logBody"></tbody>
+      </table>
+      <div style="padding:12px 16px;text-align:right;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#617681">
+        TOTAL STUDY TIME &nbsp; <input id="logTotal" class="edit-value" value="— : —" style="width:82px;text-align:center">
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTO TASKS + FILLABLE QUESTIONS -->
+  <div class="lower">
+    <div class="stat">
+      <h3>Completed</h3>
+      <div class="big" id="completed">0 %</div>
+      <div style="font-size:10px;color:#7a8a91;margin-top:8px" id="completedText">0 of 0 tasks</div>
+    </div>
+
+    <div class="stat questions">
+      <h3>Questions</h3>
+      <div class="split">
+        <div><span>Total</span><input id="qTotal" type="number" min="0" placeholder="0"></div>
+        <div><span>Wrong</span><input id="qWrong" type="number" min="0" placeholder="0"></div>
+        <div><span>Skipped</span><input id="qSkipped" type="number" min="0" placeholder="0"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBJECT WISE TRACKER -->
+  <div class="panel subject-tracker">
+    <div class="panel-head"><span>▥</span><h2>Subject Wise Tracker</h2></div>
+    <div class="tracker-row physics">
+      <div>ϟ &nbsp; PHYSICS</div>
+      <div>Lec <input class="check" type="checkbox"></div>
+      <div>Rev <input class="check" type="checkbox"></div>
+      <div>QP <input class="check" type="checkbox"></div>
+    </div>
+    <div class="tracker-row biology">
+      <div>◈ &nbsp; BIOLOGY</div>
+      <div>Lec <input class="check" type="checkbox"></div>
+      <div>Rev <input class="check" type="checkbox"></div>
+      <div>QP <input class="check" type="checkbox"></div>
+    </div>
+    <div class="tracker-row chemistry">
+      <div>△ &nbsp; CHEMISTRY</div>
+      <div>Lec <input class="check" type="checkbox"></div>
+      <div>Rev <input class="check" type="checkbox"></div>
+      <div>QP <input class="check" type="checkbox"></div>
+    </div>
+  </div>
+
+  <div class="share-actions print-hide">
+    <button class="action-btn" onclick="saveDailyUpdate()">✓ Save Daily Update</button>
+     <button class="action-btn" onclick="shareToday()">↗ Share Today's Report</button>
+    <button class="action-btn" onclick="printTracker()">⎙ Print / Save PDF</button>
+  </div>
+
+  <div class="print-only" id="printSummary"></div>
+
+  <div class="footer">
+    <span>NEET 2027 &nbsp;/&nbsp; DAILY CONTROL &nbsp;/&nbsp; ~ SALAAR</span>
+    <span>SMALL STEPS. BIG RESULTS.</span>
+  </div>
+</div>
+
+<script>
+const dateInput=document.getElementById('date');
+const dayNo=document.getElementById('dayNo');
+const taskBody=document.getElementById('taskBody');
+const base=new Date('2026-09-26T00:00:00');
+// Versioned storage prevents data from older tracker builds from appearing on every date.
+const STORAGE_PREFIX='neetTracker_v4_';
+
+/*
+  PERSISTENCE SAFETY:
+  - The existing date-by-date keys are kept exactly as they are.
+  - localStorage remains the primary store.
+  - IndexedDB is a second persistent copy, used as a fallback if localStorage
+    is unavailable/cleared by the Android file-opening context.
+  - The visible date system is NOT changed.
+*/
+const DB_NAME='neetTrackerPersistentDB';
+const DB_STORE='days';
+let dbPromise=null;
+
+function openTrackerDB(){
+  if(!('indexedDB' in window)) return Promise.resolve(null);
+  if(dbPromise) return dbPromise;
+  dbPromise=new Promise(resolve=>{
+    try{
+      const req=indexedDB.open(DB_NAME,1);
+      req.onupgradeneeded=()=>{ try{ req.result.createObjectStore(DB_STORE); }catch(e){} };
+      req.onsuccess=()=>resolve(req.result);
+      req.onerror=()=>resolve(null);
+      req.onblocked=()=>resolve(null);
+    }catch(e){ resolve(null); }
+  });
+  return dbPromise;
+}
+function idbGet(k){
+  return openTrackerDB().then(db=>new Promise(resolve=>{
+    if(!db) return resolve(null);
+    try{
+      const req=db.transaction(DB_STORE,'readonly').objectStore(DB_STORE).get(k);
+      req.onsuccess=()=>resolve(req.result ?? null);
+      req.onerror=()=>resolve(null);
+    }catch(e){ resolve(null); }
+  }));
+}
+function idbSet(k,v){
+  return openTrackerDB().then(db=>new Promise(resolve=>{
+    if(!db) return resolve(false);
+    try{
+      const req=db.transaction(DB_STORE,'readwrite').objectStore(DB_STORE).put(v,k);
+      req.onsuccess=()=>resolve(true);
+      req.onerror=()=>resolve(false);
+    }catch(e){ resolve(false); }
+  }));
+}
+function idbDelete(k){
+  return openTrackerDB().then(db=>new Promise(resolve=>{
+    if(!db) return resolve(false);
+    try{
+      const req=db.transaction(DB_STORE,'readwrite').objectStore(DB_STORE).delete(k);
+      req.onsuccess=()=>resolve(true);
+      req.onerror=()=>resolve(false);
+    }catch(e){ resolve(false); }
+  }));
+}
+function safeLocalGet(k){
+  try{return localStorage.getItem(k);}catch(e){return null;}
+}
+function safeLocalSet(k,v){
+  try{localStorage.setItem(k,v);return true;}catch(e){return false;}
+}
+function safeLocalRemove(k){
+  try{localStorage.removeItem(k);}catch(e){}
+}
+
+function localISODate(d=new Date()){
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,'0');
+  const day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+
+const savedDate=safeLocalGet(STORAGE_PREFIX+'selectedDate');
+dateInput.value=savedDate || localISODate();
+dateInput.setAttribute('autocomplete','off');
+
+function key(iso=dateInput.value){ return STORAGE_PREFIX+'day_'+iso; }
+function rememberDate(){
+  safeLocalSet(STORAGE_PREFIX+'selectedDate',dateInput.value);
+  idbSet(STORAGE_PREFIX+'selectedDate',dateInput.value);
+}
+function currentDay(){
+  const d=new Date(dateInput.value+'T00:00:00');
+  return Math.max(1,Math.floor((d-base)/86400000)+1);
+}
+function updateDay(){ dayNo.textContent=currentDay(); }
+
+function saveState(){
+  if(!dateInput.value) return;
+  const state={
+    target:document.getElementById('todayTarget').value,
+    wake:document.getElementById('wake').value,
+    sleep:document.getElementById('sleep').value,
+    totalStudy:document.getElementById('totalStudy').value,
+    logTotal:document.getElementById('logTotal').value,
+    qTotal:document.getElementById('qTotal').value,
+    qWrong:document.getElementById('qWrong').value,
+    qSkipped:document.getElementById('qSkipped').value,
+    tasks:[...document.querySelectorAll('#taskBody tr')].map(tr=>({
+      subject:tr.querySelector('.task-subject').value,
+      task:tr.querySelector('.task-input').value,
+      done:tr.querySelector('.taskcheck').checked
+    })),
+    logs:[...document.querySelectorAll('#logBody tr')].map(tr=>[...tr.querySelectorAll('input')].map(i=>i.value)),
+    subjects:[...document.querySelectorAll('.subject-tracker .tracker-row')].map(row=>[...row.querySelectorAll('input.check')].map(i=>i.checked))
+  };
+  const serialized=JSON.stringify(state);
+  safeLocalSet(key(),serialized);
+  // Mirror every date separately; this preserves the existing date-by-date behavior.
+  idbSet(key(),serialized);
+}
+
+function resetBlank(){
+  document.getElementById('todayTarget').value='08:00';
+  document.getElementById('wake').value='— : —';
+  document.getElementById('sleep').value='— : —';
+  document.getElementById('totalStudy').value='— : —';
+  document.getElementById('logTotal').value='— : —';
+  document.getElementById('qTotal').value='';
+  document.getElementById('qWrong').value='';
+  document.getElementById('qSkipped').value='';
+  taskBody.innerHTML='';
+  makeInitialTasks();
+  document.getElementById('logBody').innerHTML='';
+  makeInitialLogs();
+  document.querySelectorAll('.subject-tracker input.check').forEach(x=>x.checked=false);
+  updateProgress();
+}
+
+async function loadState(){
+  // ALWAYS clear the visible form first. If this date has no saved record,
+  // the result stays completely fresh instead of carrying another date's target.
+  resetBlank();
+  let raw=safeLocalGet(key());
+  // If the normal browser storage is unavailable, recover this SAME date
+  // from the persistent mirror.
+  if(!raw) raw=await idbGet(key());
+  if(!raw) return false;
+  try{
+    const s=JSON.parse(raw);
+    document.getElementById('todayTarget').value=s.target ?? '08:00';
+    document.getElementById('wake').value=s.wake ?? '— : —';
+    document.getElementById('sleep').value=s.sleep ?? '— : —';
+    document.getElementById('totalStudy').value=s.totalStudy ?? '— : —';
+    document.getElementById('logTotal').value=s.logTotal ?? '— : —';
+    document.getElementById('qTotal').value=s.qTotal ?? '';
+    document.getElementById('qWrong').value=s.qWrong ?? '';
+    document.getElementById('qSkipped').value=s.qSkipped ?? '';
+
+    taskBody.innerHTML='';
+    (s.tasks||[]).forEach(t=>{
+      const tr=taskRow(t.subject||'Biology');
+      tr.querySelector('.task-input').value=t.task||'';
+      tr.querySelector('.taskcheck').checked=!!t.done;
+      taskBody.appendChild(tr);
+    });
+    if(!s.tasks || !s.tasks.length) makeInitialTasks();
+
+    document.getElementById('logBody').innerHTML='';
+    (s.logs||[]).forEach(vals=>{
+      addLogRow();
+      const inputs=[...document.getElementById('logBody').lastElementChild.querySelectorAll('input')];
+      vals.forEach((v,i)=>{if(inputs[i]) inputs[i].value=v||'';});
+    });
+    if(!s.logs || !s.logs.length) makeInitialLogs();
+
+    const rows=[...document.querySelectorAll('.subject-tracker .tracker-row')];
+    (s.subjects||[]).forEach((vals,r)=>vals.forEach((v,i)=>{
+      const input=rows[r]?.querySelectorAll('input.check')[i];
+      if(input) input.checked=!!v;
+    }));
+    updateProgress();
+    return true;
+  }catch(e){
+    console.warn('Could not load saved date data:',e);
+    resetBlank();
+    return false;
+  }
+}
+
+function switchToDate(iso){
+  if(!iso) return;
+  const normalized=iso;
+  if(normalized===dateInput.value){
+    rememberDate();
+    updateDay();
+    loadState();
+    return;
+  }
+  // Save ONLY the date we are leaving.
+  saveState();
+  dateInput.value=normalized;
+  rememberDate();
+  updateDay();
+  // Now load ONLY the new date's record. No legacy/global target is reused.
+  loadState();
+}
+
+function changeDay(n){
+  const d=new Date(dateInput.value+'T00:00:00');
+  d.setDate(d.getDate()+n);
+  switchToDate(localISODate(d));
+}
+function goToday(){ switchToDate(localISODate()); }
+dateInput.addEventListener('change',()=>switchToDate(dateInput.value));
+
+function taskRow(subject='Biology'){
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><select class="task-subject" aria-label="Subject"><option ${subject==='Biology'?'selected':''}>Biology</option><option ${subject==='Chemistry'?'selected':''}>Chemistry</option><option ${subject==='Physics'?'selected':''}>Physics</option><option ${subject==='TEST'?'selected':''}>TEST</option></select></td><td><input class="task-input" placeholder="Enter task"></td><td style="text-align:center"><input class="check taskcheck" type="checkbox"></td><td><button class="remove" onclick="removeTask(this)" title="Remove task">×</button></td>`;
+  tr.querySelector('.taskcheck').addEventListener('change',()=>{updateProgress();saveState();});
+  tr.querySelector('.task-input').addEventListener('input',saveState);
+  tr.querySelector('.task-subject').addEventListener('change',saveState);
+  return tr;
+}
+function makeInitialTasks(){
+  taskBody.appendChild(taskRow('Biology'));
+  taskBody.appendChild(taskRow('Chemistry'));
+  taskBody.appendChild(taskRow('Physics'));
+  taskBody.appendChild(taskRow('TEST'));
+}
+function makeInitialLogs(){for(let i=0;i<6;i++) addLogRow();}
+
+function resetAll(){
+  if(!confirm('Reset this entire day? Targets, study log, questions, timings and subject checks for this date will be cleared.')) return;
+  safeLocalRemove(key());
+  idbDelete(key());
+  resetBlank();
+  rememberDate();
+}
+function resetTargets(){resetAll();}
+function addTask(){taskBody.appendChild(taskRow());updateProgress();saveState();}
+function removeTask(btn){btn.closest('tr').remove();updateProgress();saveState();}
+function updateProgress(){
+  const checks=[...document.querySelectorAll('.taskcheck')];
+  const done=checks.filter(x=>x.checked).length;
+  const total=checks.length;
+  const p=total?Math.round(done/total*100):0;
+  document.getElementById('completed').textContent=p+' %';
+  document.getElementById('progressTop').textContent=p+' %';
+  document.getElementById('completedText').textContent=done+' of '+total+' tasks';
+}
+function addLogRow(){
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><input placeholder="— : — → — : —"></td><td><input placeholder="Activity"></td><td><input placeholder="e.g. 01:30"></td>`;
+  document.getElementById('logBody').appendChild(tr);
+  tr.querySelectorAll('input').forEach(i=>i.addEventListener('input',saveState));
+}
+
+function reportText(){
+  saveState();
+  const date=new Date(dateInput.value+'T00:00:00');
+  const dateText=date.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  const tasks=[...document.querySelectorAll('#taskBody tr')].map(tr=>{
+    const sub=tr.querySelector('.task-subject').value;
+    const task=tr.querySelector('.task-input').value||'—';
+    const done=tr.querySelector('.taskcheck').checked;
+    return `${done?'✓':'○'} ${sub}: ${task}`;
+  });
+  const logs=[...document.querySelectorAll('#logBody tr')].map(tr=>{
+    const x=[...tr.querySelectorAll('input')].map(i=>i.value.trim());
+    return x[1]?`• ${x[1]}${x[2]?' — '+x[2]:''}${x[0]?' ('+x[0]+')':''}`:'';
+  }).filter(Boolean);
+  const total=document.getElementById('qTotal').value||0;
+  const wrong=document.getElementById('qWrong').value||0;
+  const skipped=document.getElementById('qSkipped').value||0;
+  return `NEET 2027 — DAILY STUDY REPORT
+Day ${currentDay()} / 220 • ${dateText}
+
+TARGET: ${document.getElementById('todayTarget').value}
+TOTAL STUDY: ${document.getElementById('totalStudy').value}
+WAKE: ${document.getElementById('wake').value} • SLEEP: ${document.getElementById('sleep').value}
+
+TASKS
+${tasks.join('\n')}
+
+STUDY LOG
+${logs.length?logs.join('\n'):'—'}
+
+QUESTIONS
+Total: ${total} • Wrong: ${wrong} • Skipped: ${skipped}
+Completion: ${document.getElementById('completed').textContent}
+
+~ SALAAR`;
+}
+function buildShareFile(){
+  saveState();
+  const clone=document.documentElement.cloneNode(true);
+  // Remove scripts so the shared file is a frozen snapshot, not a blank/new tracker.
+  clone.querySelectorAll('script').forEach(s=>s.remove());
+  const liveInputs=[...document.querySelectorAll('input,select')];
+  const snapInputs=[...clone.querySelectorAll('input,select')];
+  liveInputs.forEach((live,i)=>{
+    const snap=snapInputs[i]; if(!snap) return;
+    if(live.tagName==='SELECT'){
+      [...snap.options].forEach((o,j)=>o.selected=live.options[j]?.selected||false);
+    }else if(live.type==='checkbox'){
+      snap.checked=live.checked;
+      if(live.checked) snap.setAttribute('checked','checked'); else snap.removeAttribute('checked');
+    }else{
+      snap.value=live.value; snap.setAttribute('value',live.value);
+    }
+  });
+  clone.querySelectorAll('.share-actions,.add,.remove,.empty-note,.footer').forEach(el=>el.remove());
+  clone.querySelectorAll('.nav button').forEach(btn=>btn.remove());
+  const dateText=new Date(dateInput.value+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  const stamp=`<div style="text-align:center;font:11px Inter,Arial,sans-serif;letter-spacing:.12em;color:#607482;margin:8px 0 14px">DAY ${currentDay()} / 220 • ${dateText}</div>`;
+  const page=clone.querySelector('.page');
+  if(page) page.insertAdjacentHTML('afterbegin',stamp);
+  const style=clone.querySelector('style');
+  if(style) style.textContent += `\nbody{background:#f3f4f2!important}.page{margin:24px auto!important}.share-actions{display:none!important}`;
+  const html='<!DOCTYPE html>\n'+clone.outerHTML;
+  return {html, dateText};
+}
+
+function saveDailyUpdate(){
+  saveState();
+  const iso=dateInput.value;
+  const stamp=new Date().toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'});
+  safeLocalSet(STORAGE_PREFIX+'lastSaved', JSON.stringify({date:iso,savedAt:stamp}));
+  idbSet(STORAGE_PREFIX+'lastSaved', JSON.stringify({date:iso,savedAt:stamp}));
+  alert('Daily Update saved. This day will reopen with the saved data in this browser.');
+}
+
+async function shareToday(){
+  const {html,dateText}=buildShareFile();
+  const safeDate=dateInput.value;
+  const file=new File([html],`NEET-Daily-Study-${safeDate}.html`,{type:'text/html'});
+  if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+    try{await navigator.share({title:`NEET Daily Study — ${dateText}`,text:'My daily study tracker — same layout and data as my tracker.',files:[file]});return;}catch(e){if(e.name==='AbortError') return;}
+  }
+  const url=URL.createObjectURL(file);
+  const a=document.createElement('a'); a.href=url; a.download=file.name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  alert('A shareable tracker file was saved. Send that HTML file to anyone; it opens with the same layout and today’s data.');
+}
+function printTracker(){
+  saveState();
+  window.print();
+}
+
+// Save every editable field EXCEPT the calendar itself. The date has its own
+// switch handler above; a second generic change handler could overwrite the
+// newly loaded date, so it is deliberately excluded.
+document.querySelectorAll('input,select').forEach(el=>{
+  if(el===dateInput || el.classList.contains('taskcheck')) return;
+  el.addEventListener('input',saveState);
+  el.addEventListener('change',saveState);
+});
+
+// Ask Android/Chrome to keep this site's storage when possible.
+try{ if(navigator.storage?.persist) navigator.storage.persist(); }catch(e){}
+
+// Save immediately when the page is being backgrounded/closed.
+window.addEventListener('pagehide',()=>{ try{ saveState(); }catch(e){} });
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='hidden'){ try{ saveState(); }catch(e){} }
+});
+
+// First render: start clean, then load ONLY the selected date's own record.
+resetBlank();
+rememberDate();
+updateDay();
+loadState().then(()=>updateProgress());
+</script>
+</body>
+</html>
