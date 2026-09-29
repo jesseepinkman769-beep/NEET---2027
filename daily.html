@@ -791,6 +791,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // First render: start clean, then load ONLY the selected date's own record.
+document.querySelectorAll('.subject-state').forEach(bindCycleButton);
 resetBlank();
 rememberDate();
 updateDay();
