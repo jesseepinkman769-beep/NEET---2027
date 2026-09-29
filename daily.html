@@ -627,11 +627,10 @@ function stateForDate(iso){
 function streakStats(iso){
   const currentState=stateForDate(iso);
   const currentMinutes=studyMinutesFromValue(currentState?.totalStudy)||studyMinutesFromValue(currentState?.logTotal);
-  if(currentMinutes<=0) return {current:0,longest:longestStreak()};
+  // A day counts toward the streak only when study time is 8:00 hours or more.
+  if(currentMinutes<480) return {current:0,longest:longestStreak()};
   let current=0, d=new Date(iso+'T00:00:00');
-  if(currentMinutes<480) current=1;
-  else{
-    while(true){
+  while(true){
       const keyDate=localISODate(d);
       const st=stateForDate(keyDate);
       const mins=studyMinutesFromValue(st?.totalStudy)||studyMinutesFromValue(st?.logTotal);
@@ -797,5 +796,5 @@ rememberDate();
 updateDay();
 loadState().then(()=>updateProgress());
 </script>
-</body>
+<script src="sync.js"></script>\n</body>
 </html>
