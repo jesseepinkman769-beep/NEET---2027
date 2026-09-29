@@ -77,6 +77,12 @@
   }
 
   async function ownerConfig() {
+    // An EDIT LINK can restore the cloud copy on a new browser/incognito.
+    const editId=qs.get('edit');
+    const editToken=qs.get('token');
+    if(editId && editToken){
+      return {shareId:editId, ownerToken:editToken, fromEditLink:true};
+    }
     let cfg=null;
     try { cfg=JSON.parse(localStorage.getItem(CONFIG_KEY)||'null'); } catch(e){}
     if (cfg?.shareId && cfg?.ownerToken) {
@@ -84,6 +90,18 @@
       if (r.ok) return cfg;
     }
     return await createOwner();
+  }
+
+  async function ownerPull(cfg){
+    const path=TABLE+'?select=data,updated_at&share_id=eq.'+encodeURIComponent(cfg.shareId);
+    const r=await api(path,{headers:{'x-share-token':cfg.ownerToken}});
+    if(!r.ok) throw new Error(await r.text());
+    const rows=await r.json();
+    if(!rows[0]) throw new Error('Cloud record not found');
+    if(rows[0].data && Object.keys(rows[0].data).length){
+      applyData(rows[0].data);
+    }
+    return rows[0];
   }
 
   async function ownerPush(cfg) {
@@ -99,6 +117,18 @@
   async function ownerStart() {
     try {
       const cfg=await ownerConfig();
+
+      // On an EDIT LINK, restore cloud data FIRST so a blank/incognito browser
+      // can never overwrite the existing cloud copy with an empty local store.
+      if(cfg.fromEditLink){
+        await ownerPull(cfg);
+        localStorage.setItem(CONFIG_KEY,JSON.stringify({
+          shareId:cfg.shareId,
+          ownerToken:cfg.ownerToken,
+          viewerToken:''
+        }));
+      }
+
       status('LIVE SYNC • connected',true);
       let last='';
       const push=async()=>{try{
@@ -108,10 +138,44 @@
       await push();
       setInterval(push,2500);
       window.addEventListener('storage',push);
-      const link=location.origin+location.pathname+'?share='+cfg.shareId+'&token='+cfg.viewerToken;
-      window.__neetShareLink=link;
+
+      // Viewer link is for read-only monitoring.
+      let viewerLink='';
+      try{
+        const saved=JSON.parse(localStorage.getItem(CONFIG_KEY)||'null');
+        if(saved?.viewerToken) viewerLink=location.origin+location.pathname+'?share='+cfg.shareId+'&token='+saved.viewerToken;
+      }catch(e){}
+      window.__neetShareLink=viewerLink;
+
+      // Edit link is the portable backup/restore link. Opening it in another
+      // browser restores the cloud copy instead of starting a blank tracker.
+      const editLink=location.origin+location.pathname+'?edit='+cfg.shareId+'&token='+cfg.ownerToken;
+      window.__neetEditLink=editLink;
+
       const btn=document.getElementById('liveSyncStatus');
-      if(btn){ btn.title='Tap to copy your LIVE VIEW link'; btn.onclick=async()=>{try{await navigator.clipboard.writeText(link);btn.textContent='● LIVE LINK COPIED';setTimeout(()=>btn.textContent='● LIVE SYNC • connected',1600);}catch(e){prompt('Copy this LIVE VIEW link:',link);}}; }
+      if(btn){
+        btn.title='Tap = copy LIVE VIEW. Long press/click again is not required; use the EDIT LINK button for portable restore.';
+        btn.onclick=async()=>{
+          if(viewerLink){
+            try{await navigator.clipboard.writeText(viewerLink);btn.textContent='● LIVE VIEW LINK COPIED';setTimeout(()=>btn.textContent='● LIVE SYNC • connected',1600);}
+            catch(e){prompt('Copy this LIVE VIEW link:',viewerLink);}
+          }else{
+            prompt('Your portable EDIT LINK (keep it private):',editLink);
+          }
+        };
+      }
+
+      if(!document.getElementById('neetEditLinkBtn')){
+        const b=document.createElement('button');
+        b.id='neetEditLinkBtn';
+        b.textContent='↗ EDIT / RESTORE LINK';
+        b.style.cssText='position:fixed;left:14px;bottom:14px;z-index:99999;padding:8px 12px;border:0;border-radius:999px;background:#0f172a;color:#fff;font:600 11px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.18);cursor:pointer';
+        b.onclick=async()=>{
+          try{await navigator.clipboard.writeText(editLink);b.textContent='✓ EDIT LINK COPIED';setTimeout(()=>b.textContent='↗ EDIT / RESTORE LINK',1800);}
+          catch(e){prompt('Keep this private. It can restore/edit your tracker:',editLink);}
+        };
+        document.body.appendChild(b);
+      }
     } catch(e) {
       status('LIVE SYNC • setup failed',false);
       console.error(e);
