@@ -57,7 +57,7 @@
       document.body.appendChild(el);
     }
     el.textContent=(ok?'● ':'○ ')+textValue;
-    el.title=location.href;
+    el.title=location.href; el.onclick=async()=>{ if(window.__neetShareLink){ try{await navigator.clipboard.writeText(window.__neetShareLink); el.textContent='● LIVE LINK COPIED'; setTimeout(()=>{el.textContent='● LIVE SYNC • connected'},1400); }catch(e){ prompt('Copy this LIVE VIEW link:',window.__neetShareLink); } } };
   }
 
   async function createOwner() {
@@ -108,8 +108,10 @@
       await push();
       setInterval(push,2500);
       window.addEventListener('storage',push);
+      const link=location.origin+location.pathname+'?share='+cfg.shareId+'&token='+cfg.viewerToken;
+      window.__neetShareLink=link;
       const btn=document.getElementById('liveSyncStatus');
-      if(btn) btn.onclick=()=>prompt('Share this LIVE VIEW link:',location.origin+location.pathname+'?share='+cfg.shareId+'&token='+cfg.viewerToken);
+      if(btn){ btn.title='Tap to copy your LIVE VIEW link'; btn.onclick=async()=>{try{await navigator.clipboard.writeText(link);btn.textContent='● LIVE LINK COPIED';setTimeout(()=>btn.textContent='● LIVE SYNC • connected',1600);}catch(e){prompt('Copy this LIVE VIEW link:',link);}}; }
     } catch(e) {
       status('LIVE SYNC • setup failed',false);
       console.error(e);
