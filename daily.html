@@ -69,6 +69,24 @@ input:focus,select:focus{border-color:#9fb1ba;box-shadow:0 0 0 3px #edf2f3}
 .subject i{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;font-style:normal;margin-right:7px;background:#eef4f2}
 .target-table th:last-child,.target-table td:last-child{text-align:center;width:70px}
 .target-table th:first-child{width:135px}
+.state-cycle{
+  min-width:34px;height:30px;border:1px solid #dbe3e2;border-radius:8px;
+  background:#fff;color:#355b6d;cursor:pointer;font-size:16px;line-height:1
+}
+.state-cycle.done{background:#edf5f2;border-color:#b8d0c8}
+.state-cycle.missed{background:#faf1f1;border-color:#e0c4c4;color:#9a6d6d}
+.state-cycle.pending{background:#fff}
+.rating-panel{margin-top:12px}
+.rating-options{display:flex;gap:10px;flex-wrap:wrap;padding:14px 18px}
+.rating-option{
+  display:flex;align-items:center;gap:7px;border:1px solid #e0e6e5;
+  border-radius:9px;padding:8px 12px;font-size:11px;background:#fff;cursor:pointer
+}
+.rating-option input{width:auto;height:auto;box-shadow:none}
+.streak-strip{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.streak-card{border:1px solid var(--line);border-radius:12px;background:#fff;padding:13px 16px}
+.streak-card small{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#687b84}
+.streak-card strong{display:block;font-size:22px;margin-top:5px;color:#27495a}
 .target-table .remove{
   border:0;background:transparent;color:#9a6d6d;cursor:pointer;font-size:15px;margin-left:4px
 }
@@ -170,7 +188,7 @@ input:focus,select:focus{border-color:#9fb1ba;box-shadow:0 0 0 3px #edf2f3}
 </style>
 </head>
 
-<body data-tracker-version="3">
+<body data-tracker-version="5">
 <div class="page">
   <div class="topline">
     <span>NEET 2027 &nbsp;/&nbsp; DAILY CONTROL</span>
@@ -275,22 +293,37 @@ input:focus,select:focus{border-color:#9fb1ba;box-shadow:0 0 0 3px #edf2f3}
     <div class="panel-head"><span>▥</span><h2>Subject Wise Tracker</h2></div>
     <div class="tracker-row physics">
       <div>ϟ &nbsp; PHYSICS</div>
-      <div>Lec <input class="check" type="checkbox"></div>
-      <div>Rev <input class="check" type="checkbox"></div>
-      <div>QP <input class="check" type="checkbox"></div>
+      <div>Lec <button class="state-cycle subject-state pending" type="button" data-state="pending" aria-label="Physics lecture status">☐</button></div>
+      <div>Rev <button class="state-cycle subject-state pending" type="button" data-state="pending" aria-label="Physics revision status">☐</button></div>
+      <div>QP <button class="state-cycle subject-state pending" type="button" data-state="pending" aria-label="Physics question practice status">☐</button></div>
     </div>
     <div class="tracker-row biology">
       <div>◈ &nbsp; BIOLOGY</div>
-      <div>Lec <input class="check" type="checkbox"></div>
-      <div>Rev <input class="check" type="checkbox"></div>
-      <div>QP <input class="check" type="checkbox"></div>
+      <div>Lec <button class="state-cycle subject-state pending" type="button" data-state="pending" aria-label="Biology lecture status">☐</button></div>
+      <div>Rev <button class="state-cycle subject-state pending" type="button" data-state="pending" aria-label="Biology revision status">☐</button></div>
+      <div>QP <button class="state-cycle subject-state pending" type="button" data-state="pending" aria-label="Biology question practice status">☐</button></div>
     </div>
     <div class="tracker-row chemistry">
       <div>△ &nbsp; CHEMISTRY</div>
-      <div>Lec <input class="check" type="checkbox"></div>
-      <div>Rev <input class="check" type="checkbox"></div>
-      <div>QP <input class="check" type="checkbox"></div>
+      <div>Lec <button class="state-cycle subject-state pending" type="button" data-state="pending" aria-label="Chemistry lecture status">☐</button></div>
+      <div>Rev <button class="state-cycle subject-state pending" type="button" data-state="pending" aria-label="Chemistry revision status">☐</button></div>
+      <div>QP <button class="state-cycle subject-state pending" type="button" data-state="pending" aria-label="Chemistry question practice status">☐</button></div>
     </div>
+  </div>
+
+  <div class="panel rating-panel">
+    <div class="panel-head"><span>◎</span><h2>How Was Your Day?</h2></div>
+    <div class="rating-options">
+      <label class="rating-option"><input type="radio" name="dayRating" value="Excellent"> Excellent</label>
+      <label class="rating-option"><input type="radio" name="dayRating" value="Good"> Good</label>
+      <label class="rating-option"><input type="radio" name="dayRating" value="Average"> Average</label>
+      <label class="rating-option"><input type="radio" name="dayRating" value="Poor"> Poor</label>
+    </div>
+  </div>
+
+  <div class="streak-strip">
+    <div class="streak-card"><small>🔥 Current Streak</small><strong id="currentStreak">0 Days</strong></div>
+    <div class="streak-card"><small>Longest Streak</small><strong id="longestStreak">0 Days</strong></div>
   </div>
 
   <div class="share-actions print-hide">
@@ -414,13 +447,13 @@ function saveState(){
     qTotal:document.getElementById('qTotal').value,
     qWrong:document.getElementById('qWrong').value,
     qSkipped:document.getElementById('qSkipped').value,
-    tasks:[...document.querySelectorAll('#taskBody tr')].map(tr=>({
-      subject:tr.querySelector('.task-subject').value,
-      task:tr.querySelector('.task-input').value,
-      done:tr.querySelector('.taskcheck').checked
-    })),
+    tasks:[...document.querySelectorAll('#taskBody tr')].map(tr=>{
+      const state=tr.querySelector('.task-state')?.dataset.state||'pending';
+      return {subject:tr.querySelector('.task-subject').value,task:tr.querySelector('.task-input').value,state,done:state==='done'};
+    }),
     logs:[...document.querySelectorAll('#logBody tr')].map(tr=>[...tr.querySelectorAll('input')].map(i=>i.value)),
-    subjects:[...document.querySelectorAll('.subject-tracker .tracker-row')].map(row=>[...row.querySelectorAll('input.check')].map(i=>i.checked))
+    subjects:[...document.querySelectorAll('.subject-tracker .tracker-row')].map(row=>[...row.querySelectorAll('.subject-state')].map(b=>b.dataset.state||'pending')),
+    dayRating:document.querySelector('input[name="dayRating"]:checked')?.value||''
   };
   const serialized=JSON.stringify(state);
   safeLocalSet(key(),serialized);
@@ -441,8 +474,10 @@ function resetBlank(){
   makeInitialTasks();
   document.getElementById('logBody').innerHTML='';
   makeInitialLogs();
-  document.querySelectorAll('.subject-tracker input.check').forEach(x=>x.checked=false);
+  document.querySelectorAll('.subject-state').forEach(b=>setCycleState(b,'pending'));
+  document.querySelectorAll('input[name="dayRating"]').forEach(x=>x.checked=false);
   updateProgress();
+  updateStreakUI();
 }
 
 async function loadState(){
@@ -464,12 +499,13 @@ async function loadState(){
     document.getElementById('qTotal').value=s.qTotal ?? '';
     document.getElementById('qWrong').value=s.qWrong ?? '';
     document.getElementById('qSkipped').value=s.qSkipped ?? '';
+    document.querySelectorAll('input[name="dayRating"]').forEach(x=>x.checked=x.value===(s.dayRating||''));
 
     taskBody.innerHTML='';
     (s.tasks||[]).forEach(t=>{
       const tr=taskRow(t.subject||'Biology');
       tr.querySelector('.task-input').value=t.task||'';
-      tr.querySelector('.taskcheck').checked=!!t.done;
+      setCycleState(tr.querySelector('.task-state'),t.state || (t.done ? 'done' : 'pending'));
       taskBody.appendChild(tr);
     });
     if(!s.tasks || !s.tasks.length) makeInitialTasks();
@@ -484,10 +520,11 @@ async function loadState(){
 
     const rows=[...document.querySelectorAll('.subject-tracker .tracker-row')];
     (s.subjects||[]).forEach((vals,r)=>vals.forEach((v,i)=>{
-      const input=rows[r]?.querySelectorAll('input.check')[i];
-      if(input) input.checked=!!v;
+      const btn=rows[r]?.querySelectorAll('.subject-state')[i];
+      if(btn) setCycleState(btn,typeof v==='boolean'?(v?'done':'pending'):v);
     }));
     updateProgress();
+    updateStreakUI();
     return true;
   }catch(e){
     console.warn('Could not load saved date data:',e);
@@ -522,10 +559,27 @@ function changeDay(n){
 function goToday(){ switchToDate(localISODate()); }
 dateInput.addEventListener('change',()=>switchToDate(dateInput.value));
 
+function cycleState(state){
+  return state==='pending'?'done':(state==='done'?'missed':'pending');
+}
+function setCycleState(btn,state){
+  const s=['pending','done','missed'].includes(state)?state:'pending';
+  btn.dataset.state=s;
+  btn.classList.remove('pending','done','missed');
+  btn.classList.add(s);
+  btn.textContent=s==='done'?'☑':(s==='missed'?'✕':'☐');
+  btn.setAttribute('aria-label',s==='done'?'Done':(s==='missed'?'Not Done / Missed':'Pending'));
+}
+function bindCycleButton(btn){
+  btn.addEventListener('click',()=>{
+    setCycleState(btn,cycleState(btn.dataset.state||'pending'));
+    updateProgress();saveState();
+  });
+}
 function taskRow(subject='Biology'){
   const tr=document.createElement('tr');
-  tr.innerHTML=`<td><select class="task-subject" aria-label="Subject"><option ${subject==='Biology'?'selected':''}>Biology</option><option ${subject==='Chemistry'?'selected':''}>Chemistry</option><option ${subject==='Physics'?'selected':''}>Physics</option><option ${subject==='TEST'?'selected':''}>TEST</option><option ${subject==='Extra'?'selected':''}>Extra</option></select></td><td><input class="task-input" placeholder="Enter task"></td><td style="text-align:center"><input class="check taskcheck" type="checkbox"></td><td><button class="remove" onclick="removeTask(this)" title="Remove task">×</button></td>`;
-  tr.querySelector('.taskcheck').addEventListener('change',()=>{updateProgress();saveState();});
+  tr.innerHTML=`<td><select class="task-subject" aria-label="Subject"><option ${subject==='Biology'?'selected':''}>Biology</option><option ${subject==='Chemistry'?'selected':''}>Chemistry</option><option ${subject==='Physics'?'selected':''}>Physics</option><option ${subject==='TEST'?'selected':''}>TEST</option><option ${subject==='Extra'?'selected':''}>Extra</option></select></td><td><input class="task-input" placeholder="Enter task"></td><td style="text-align:center"><button class="state-cycle task-state pending" type="button" data-state="pending" aria-label="Target status">☐</button></td><td><button class="remove" onclick="removeTask(this)" title="Remove task">×</button></td>`;
+  bindCycleButton(tr.querySelector('.task-state'));
   tr.querySelector('.task-input').addEventListener('input',saveState);
   tr.querySelector('.task-subject').addEventListener('change',saveState);
   return tr;
@@ -550,13 +604,73 @@ function resetTargets(){resetAll();}
 function addTask(){taskBody.appendChild(taskRow());updateProgress();saveState();}
 function removeTask(btn){btn.closest('tr').remove();updateProgress();saveState();}
 function updateProgress(){
-  const checks=[...document.querySelectorAll('.taskcheck')];
-  const done=checks.filter(x=>x.checked).length;
-  const total=checks.length;
+  const states=[...document.querySelectorAll('.task-state')].map(x=>x.dataset.state||'pending');
+  const done=states.filter(x=>x==='done').length;
+  const missed=states.filter(x=>x==='missed').length;
+  const total=states.length;
   const p=total?Math.round(done/total*100):0;
   document.getElementById('completed').textContent=p+' %';
   document.getElementById('progressTop').textContent=p+' %';
-  document.getElementById('completedText').textContent=done+' of '+total+' tasks';
+  document.getElementById('completedText').textContent=done+' done · '+missed+' missed · '+total+' total';
+}
+
+function studyMinutesFromValue(v){
+  if(!v || String(v).includes('—')) return 0;
+  const m=String(v).match(/(\d+)\s*:\s*(\d+)/);
+  return m ? Number(m[1])*60+Number(m[2]) : 0;
+}
+function stateForDate(iso){
+  let raw=safeLocalGet(STORAGE_PREFIX+'day_'+iso);
+  if(!raw) return null;
+  try{return JSON.parse(raw)}catch(e){return null}
+}
+function streakStats(iso){
+  const currentState=stateForDate(iso);
+  const currentMinutes=studyMinutesFromValue(currentState?.totalStudy)||studyMinutesFromValue(currentState?.logTotal);
+  if(currentMinutes<=0) return {current:0,longest:longestStreak()};
+  let current=0, d=new Date(iso+'T00:00:00');
+  if(currentMinutes<480) current=1;
+  else{
+    while(true){
+      const keyDate=localISODate(d);
+      const st=stateForDate(keyDate);
+      const mins=studyMinutesFromValue(st?.totalStudy)||studyMinutesFromValue(st?.logTotal);
+      if(mins<480) break;
+      current++;
+      d.setDate(d.getDate()-1);
+    }
+  }
+  return {current,longest:Math.max(current,longestStreak())};
+}
+function longestStreak(){
+  const dates=[];
+  try{
+    for(let i=0;i<localStorage.length;i++){
+      const k=localStorage.key(i)||'';
+      if(k.startsWith(STORAGE_PREFIX+'day_')) dates.push(k.slice((STORAGE_PREFIX+'day_').length));
+    }
+  }catch(e){}
+  dates.sort();
+  let best=0,run=0,prev=null;
+  for(const iso of dates){
+    const st=stateForDate(iso);
+    const mins=studyMinutesFromValue(st?.totalStudy)||studyMinutesFromValue(st?.logTotal);
+    if(mins>=480){
+      const d=new Date(iso+'T00:00:00');
+      if(prev){
+        const diff=Math.round((d-prev)/86400000);
+        run=diff===1?run+1:1;
+      }else run=1;
+      best=Math.max(best,run);prev=d;
+    }else prev=null,run=0;
+  }
+  return best;
+}
+function updateStreakUI(){
+  const st=streakStats(dateInput.value);
+  const a=document.getElementById('currentStreak'),b=document.getElementById('longestStreak');
+  if(a) a.textContent=st.current+' Day'+(st.current===1?'':'s');
+  if(b) b.textContent=st.longest+' Day'+(st.longest===1?'':'s');
 }
 function addLogRow(){
   const tr=document.createElement('tr');
@@ -661,7 +775,7 @@ function printTracker(){
 // switch handler above; a second generic change handler could overwrite the
 // newly loaded date, so it is deliberately excluded.
 document.querySelectorAll('input,select').forEach(el=>{
-  if(el===dateInput || el.classList.contains('taskcheck')) return;
+  if(el===dateInput) return;
   el.addEventListener('input',saveState);
   el.addEventListener('change',saveState);
 });
