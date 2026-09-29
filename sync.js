@@ -45,7 +45,9 @@
       }
     });
     window.dispatchEvent(new StorageEvent('storage'));
+    try { if (typeof window.loadState === 'function') window.loadState().then(()=>{ try { if (typeof window.updateProgress === 'function') window.updateProgress(); } catch(e){} }); } catch(e){}
     try { if (typeof window.updateDashboard === 'function') window.updateDashboard(); } catch(e){}
+    try { window.dispatchEvent(new CustomEvent('neet-cloud-restored')); } catch(e){}
   }
 
   function status(textValue, ok=false) {
