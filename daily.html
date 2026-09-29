@@ -524,7 +524,7 @@ dateInput.addEventListener('change',()=>switchToDate(dateInput.value));
 
 function taskRow(subject='Biology'){
   const tr=document.createElement('tr');
-  tr.innerHTML=`<td><select class="task-subject" aria-label="Subject"><option ${subject==='Biology'?'selected':''}>Biology</option><option ${subject==='Chemistry'?'selected':''}>Chemistry</option><option ${subject==='Physics'?'selected':''}>Physics</option><option ${subject==='TEST'?'selected':''}>TEST</option></select></td><td><input class="task-input" placeholder="Enter task"></td><td style="text-align:center"><input class="check taskcheck" type="checkbox"></td><td><button class="remove" onclick="removeTask(this)" title="Remove task">×</button></td>`;
+  tr.innerHTML=`<td><select class="task-subject" aria-label="Subject"><option ${subject==='Biology'?'selected':''}>Biology</option><option ${subject==='Chemistry'?'selected':''}>Chemistry</option><option ${subject==='Physics'?'selected':''}>Physics</option><option ${subject==='TEST'?'selected':''}>TEST</option><option ${subject==='Extra'?'selected':''}>Extra</option></select></td><td><input class="task-input" placeholder="Enter task"></td><td style="text-align:center"><input class="check taskcheck" type="checkbox"></td><td><button class="remove" onclick="removeTask(this)" title="Remove task">×</button></td>`;
   tr.querySelector('.taskcheck').addEventListener('change',()=>{updateProgress();saveState();});
   tr.querySelector('.task-input').addEventListener('input',saveState);
   tr.querySelector('.task-subject').addEventListener('change',saveState);
@@ -535,6 +535,7 @@ function makeInitialTasks(){
   taskBody.appendChild(taskRow('Chemistry'));
   taskBody.appendChild(taskRow('Physics'));
   taskBody.appendChild(taskRow('TEST'));
+  taskBody.appendChild(taskRow('Extra'));
 }
 function makeInitialLogs(){for(let i=0;i<6;i++) addLogRow();}
 
