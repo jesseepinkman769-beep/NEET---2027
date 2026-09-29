@@ -131,4 +131,4 @@ document.getElementById('refresh').onclick=updateDashboard;document.getElementBy
 window.addEventListener('storage',updateDashboard);setInterval(updateDashboard,2000);document.getElementById('today').textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'2-digit',month:'short',year:'numeric'});updateDashboard();
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
-</body></html>
+<script src="sync.js"></script>\n</body></html>
