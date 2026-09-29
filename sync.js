@@ -118,7 +118,39 @@
     }
   }
 
+
+  function lockViewerDocument(doc){
+    if(!doc || doc.__neetViewerLocked) return;
+    doc.__neetViewerLocked=true;
+    const lock=()=>{
+      doc.querySelectorAll('input,textarea,select').forEach(el=>{
+        if(el.tagName==='SELECT' || (el.tagName==='INPUT' && ['checkbox','radio'].includes(el.type))) el.disabled=true;
+        else el.readOnly=true;
+        el.setAttribute('aria-disabled','true');
+      });
+      doc.querySelectorAll('[contenteditable="true"]').forEach(el=>el.setAttribute('contenteditable','false'));
+      doc.querySelectorAll('button').forEach(btn=>{
+        const code=(btn.getAttribute('onclick')||'').toLowerCase();
+        const allowed=code.includes('changeday(')||code.includes('gotoday(')||code.includes('scrollto(')||code.includes('printtracker(')||code.includes('sharetoday(')||btn.hasAttribute('data-view')||btn.hasAttribute('data-s')||btn.id==='all'||btn.id==='print';
+        if(!allowed){btn.disabled=true;btn.setAttribute('aria-disabled','true');btn.title='LIVE VIEW is read-only';}
+      });
+    };
+    lock();
+    new MutationObserver(lock).observe(doc.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['disabled','contenteditable']});
+  }
+  function lockViewerUI(){
+    lockViewerDocument(document);
+    document.querySelectorAll('iframe').forEach(frame=>{
+      try{
+        if(frame.contentDocument) lockViewerDocument(frame.contentDocument);
+        frame.addEventListener('load',()=>{try{lockViewerDocument(frame.contentDocument);}catch(e){}});
+      }catch(e){}
+    });
+  }
+
   async function viewerStart() {
+    lockViewerUI();
+    setInterval(lockViewerUI,1000);
     status('LIVE VIEW • connecting',false);
     const path=TABLE+'?select=data,updated_at&share_id=eq.'+encodeURIComponent(shareId);
     let last='';
