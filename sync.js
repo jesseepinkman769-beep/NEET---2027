@@ -106,7 +106,7 @@
         if(snap!==last){last=snap;await ownerPush(cfg);}
       }catch(e){status('LIVE SYNC • offline',false);}};
       await push();
-      setInterval(push,2500);
+      setInterval(push,1000);
       window.addEventListener('storage',push);
       const link=location.origin+location.pathname+'?share='+cfg.shareId+'&token='+cfg.viewerToken;
       window.__neetShareLink=link;
