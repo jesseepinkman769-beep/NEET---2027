@@ -686,8 +686,9 @@ function reportText(){
   const tasks=[...document.querySelectorAll('#taskBody tr')].map(tr=>{
     const sub=tr.querySelector('.task-subject').value;
     const task=tr.querySelector('.task-input').value||'—';
-    const done=tr.querySelector('.taskcheck').checked;
-    return `${done?'✓':'○'} ${sub}: ${task}`;
+    const state=tr.querySelector('.task-state')?.dataset.state||'pending';
+    const mark=state==='done'?'✓':(state==='missed'?'✕':'○');
+    return `${mark} ${sub}: ${task}`;
   });
   const logs=[...document.querySelectorAll('#logBody tr')].map(tr=>{
     const x=[...tr.querySelectorAll('input')].map(i=>i.value.trim());
