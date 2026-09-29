@@ -631,13 +631,12 @@ function streakStats(iso){
   if(currentMinutes<480) return {current:0,longest:longestStreak()};
   let current=0, d=new Date(iso+'T00:00:00');
   while(true){
-      const keyDate=localISODate(d);
-      const st=stateForDate(keyDate);
-      const mins=studyMinutesFromValue(st?.totalStudy)||studyMinutesFromValue(st?.logTotal);
-      if(mins<480) break;
-      current++;
-      d.setDate(d.getDate()-1);
-    }
+    const keyDate=localISODate(d);
+    const st=stateForDate(keyDate);
+    const mins=studyMinutesFromValue(st?.totalStudy)||studyMinutesFromValue(st?.logTotal);
+    if(mins<480) break;
+    current++;
+    d.setDate(d.getDate()-1);
   }
   return {current,longest:Math.max(current,longestStreak())};
 }
