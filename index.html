@@ -64,7 +64,7 @@ body{padding:12px}.app{max-width:1500px;margin:auto}.shell{background:#ffffffed;
 <div class="app"><div class="shell">
 <header class="top"><div><div class="eyebrow">NEET 2027 / PERSONAL CONTROL</div><div class="brand">SALAAR ♡</div><div class="sub">Command center · execution over intention</div></div><div class="profile-wrap"><div class="today" id="today"></div><div class="profile-fallback">SA</div><img class="profile-photo" src="profile.jpg" alt="Salaar" onerror="this.style.display='none'"></div></header>
 <nav class="nav" id="nav">
-<button class="active" data-view="home">⌂ Dashboard</button><button data-view="daily">Daily Tracker</button><button data-view="monthly">Monthly Targets</button><button data-view="questions">Question Log</button><button data-view="syllabus">Syllabus</button><button data-view="biology">Biology Master Plan</button>
+<button class="active" data-view="home">⌂ Dashboard</button><button data-view="daily">Daily Tracker</button><button data-view="monthly">Monthly Targets</button><button data-view="syllabus">Syllabus</button><button data-view="biology">Biology Master Plan</button>
 </nav>
 <main>
 <section class="view active" id="home">
@@ -98,15 +98,15 @@ body{padding:12px}.app{max-width:1500px;margin:auto}.shell{background:#ffffffed;
 </div></section>
 
 <section class="section"><h2>Quick open</h2><div class="links">
-<div class="link" data-open="daily"><b>Daily Tracker</b><span>Targets · study log · daily execution</span></div><div class="link" data-open="monthly"><b>Monthly Targets</b><span>Physics · Chemistry · Zoology · Botany · Tests</span></div><div class="link" data-open="questions"><b>Question Log</b><span>Physics · Chemistry · Biology · correct · incorrect · skipped</span></div>
+<div class="link" data-open="daily"><b>Daily Tracker</b><span>Targets · study log · daily execution</span></div><div class="link" data-open="monthly"><b>Monthly Targets</b><span>Physics · Chemistry · Zoology · Botany · Tests</span></div>
 <div class="link" data-open="syllabus"><b>Syllabus Control</b><span>Physics · Chemistry · Biology chapter progress</span></div>
 <div class="link" data-open="biology"><b>Biology Master Plan</b><span>BPT · day-wise plan · test analysis · difficulty board</span></div>
 </div></section>
 
 <section class="section"><h2>Data control</h2><div class="actions"><button class="btn" id="refresh">↻ Refresh dashboard</button><button class="btn" id="export">Export backup</button><button class="btn" id="importBtn">Restore backup</button><input class="hiddenInput" id="importFile" type="file" accept="application/json"></div><div class="footline">Backup includes this website's localStorage tracker data. Keep a copy before clearing browser data or changing devices.</div></section>
-<div class="note"><b>Live dashboard:</b> changes made inside Daily Tracker, Syllabus, or Biology Master Plan are picked up automatically. Your existing tracker keys are preserved.</div>
+<div class="note"><b>Live dashboard:</b> changes made inside Daily Tracker, Monthly Targets, Syllabus, or Biology Master Plan are picked up automatically. Your existing tracker keys are preserved.</div>
 </section>
-<section class="view" id="daily"><div class="frameWrap"><iframe src="daily.html?v=7" title="Daily Tracker"></iframe></div></section><section class="view" id="monthly"><div class="frameWrap"><iframe src="monthly.html?v=1" title="Monthly Targets"></iframe></div></section><section class="view" id="questions"><div class="frameWrap"><iframe src="questions.html?v=1" title="Question Log"></iframe></div></section>
+<section class="view" id="daily"><div class="frameWrap"><iframe src="daily.html?v=7" title="Daily Tracker"></iframe></div></section><section class="view" id="monthly"><div class="frameWrap"><iframe src="monthly.html?v=1" title="Monthly Targets"></iframe></div></section>
 <section class="view" id="syllabus"><div class="frameWrap"><iframe src="syllabus.html" title="Syllabus Tracker"></iframe></div></section>
 <section class="view" id="biology"><div class="frameWrap"><iframe src="biology.html" title="Biology Master Plan"></iframe></div></section>
 </main></div></div>
@@ -114,7 +114,7 @@ body{padding:12px}.app{max-width:1500px;margin:auto}.shell{background:#ffffffed;
 const buttons=[...document.querySelectorAll('#nav button')],views=[...document.querySelectorAll('.view')];
 function openView(name){buttons.forEach(b=>b.classList.toggle('active',b.dataset.view===name));views.forEach(v=>v.classList.toggle('active',v.id===name));history.replaceState(null,'','#'+name);window.scrollTo({top:0,behavior:'smooth'});}
 buttons.forEach(b=>b.onclick=()=>openView(b.dataset.view));document.querySelectorAll('[data-open]').forEach(x=>x.onclick=()=>openView(x.dataset.open));
-const hash=location.hash.replace('#','');if(['daily','monthly','questions','syllabus','biology'].includes(hash))openView(hash);
+const hash=location.hash.replace('#','');if(['daily','monthly','syllabus','biology'].includes(hash))openView(hash);
 function localISODate(d=new Date()){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`;}
 function safeGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function parseTime(v){if(!v||v.includes('—'))return null;const m=String(v).match(/(\d+)\s*:\s*(\d+)/);return m?Number(m[1])*60+Number(m[2]):null}
