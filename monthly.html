@@ -1,22 +1,169 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Monthly Targets</title><style>:root{--i:#183447;--m:#71818a;--l:#dbe4e3;--a:#68857d}*{box-sizing:border-box}body{margin:0;padding:18px;background:linear-gradient(135deg,#f2f6f4,#fbfcfa 55%,#edf4f4);color:var(--i);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.p{max-width:1250px;margin:auto}.top{display:flex;justify-content:space-between;align-items:end;border-bottom:1px solid var(--l);padding:8px 4px 18px;gap:15px}.e{font-size:10px;letter-spacing:.22em;color:#607782}.t{font:500 36px Georgia,serif;margin:5px 0}.sub{font-size:11px;color:var(--m);letter-spacing:.12em;text-transform:uppercase}.month,.new{border:1px solid var(--l);background:#fff;border-radius:10px;padding:10px;font:inherit}.summary,.grid{display:grid;gap:10px}.summary{grid-template-columns:1.5fr repeat(3,1fr);margin:14px 0}.stat,.card{background:#fff;border:1px solid var(--l);border-radius:15px;padding:15px}.stat label{font-size:9px;letter-spacing:.15em;color:var(--m);text-transform:uppercase}.stat b{display:block;font-size:25px;margin-top:5px}.bar{height:5px;background:#e7eeec;border-radius:99px;margin-top:10px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--a)}.grid{grid-template-columns:repeat(2,1fr)}.card h2{font:500 19px Georgia,serif;margin:0 0 10px}.item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #edf1f0;font-size:11px}.item span{flex:1}.done span{text-decoration:line-through;color:#8a989a}.row{display:flex;gap:7px;margin-top:9px}.new{flex:1;font-size:11px}.btn{border:1px solid #d5e0de;background:#fff;color:#365766;border-radius:9px;padding:9px 11px;cursor:pointer}.btn:hover{background:var(--i);color:#fff}.del{border:0;background:none;color:#9aa6a7;cursor:pointer}.foot{font-size:9px;color:#8a989a;margin-top:12px}@media(max-width:800px){.top{flex-direction:column;align-items:start}.summary,.grid{grid-template-columns:1fr}.t{font-size:30px}}.qlog{margin-top:14px;background:#fff;border:1px solid var(--l);border-radius:15px;padding:15px}.qlog h2{font:500 19px Georgia,serif;margin:0}.qsub{font-size:9px;color:var(--m);letter-spacing:.12em;text-transform:uppercase;margin-top:4px}.qsum,.qcards{display:grid;gap:10px}.qsum{grid-template-columns:repeat(5,1fr);margin:12px 0}.qcards{grid-template-columns:repeat(3,1fr)}.qstat,.qcard{border:1px solid var(--l);border-radius:12px;background:#fbfcfb;padding:12px}.qstat label{font-size:8px;text-transform:uppercase;letter-spacing:.13em;color:var(--m)}.qstat b{display:block;font-size:20px;margin-top:4px}.qcard h3{font:500 18px Georgia,serif;margin:0 0 11px}.qfields{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.qfield label{display:block;font-size:7px;text-transform:uppercase;letter-spacing:.08em;color:var(--m);margin-bottom:4px}.qfield input{width:100%;border:1px solid var(--l);border-radius:8px;padding:9px;font:inherit;background:#fff}.qhint{font-size:9px;color:#8a989a;margin-top:9px}@media(max-width:800px){.qsum,.qcards{grid-template-columns:1fr 1fr}.qfields{grid-template-columns:1fr 1fr}}@media(max-width:500px){.qsum,.qcards{grid-template-columns:1fr}}</style></head><body><div class="p"><header class="top"><div><div class="e">NEET 2027 / PLANNING</div><div class="t">Monthly Targets</div><div class="sub">One month · one clear execution board</div></div><input id="month" class="month" type="month"></header><section class="summary"><div class="stat"><label>Monthly Progress</label><b id="pct">0%</b><div class="bar"><i id="bar"></i></div></div><div class="stat"><label>Total Targets</label><b id="total">0</b></div><div class="stat"><label>Completed</label><b id="done">0</b></div><div class="stat"><label>Remaining</label><b id="rem">0</b></div></section><main id="grid" class="grid"></main><section class="qlog">
-<h2>Question Log</h2>
-<div class="qsub">This month · Physics · Chemistry · Biology</div>
-<div id="qsum" class="qsum"></div>
-<div id="qcards" class="qcards"></div>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Monthly Targets · NEET 2027</title>
+<style>
+:root{--ink:#183447;--muted:#71818a;--line:#dbe4e3;--soft:#f5f8f7;--paper:#fff;--accent:#68857d}
+*{box-sizing:border-box}
+body{margin:0;padding:18px;background:#f5f7f6;color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.wrap{max-width:1250px;margin:auto}
+.top{display:flex;justify-content:space-between;align-items:end;gap:16px;padding:8px 4px 18px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:10px;letter-spacing:.22em;color:#607782;text-transform:uppercase}
+h1{font:500 36px Georgia,serif;margin:5px 0}
+.sub{font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.month{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 12px;font:inherit;color:var(--ink)}
+.summary{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:10px;margin:14px 0}
+.stat,.subject,.qlog{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:15px}
+.stat label,.qfield label{font-size:9px;letter-spacing:.15em;color:var(--muted);text-transform:uppercase}
+.stat b{display:block;font-size:25px;margin-top:5px}
+.bar{height:5px;background:#e7eeec;border-radius:99px;margin-top:10px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--accent)}
+.targets{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.subject h2,.qlog h2{font:500 19px Georgia,serif;margin:0}
+.subject-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.count{font-size:9px;color:var(--muted)}
+.items{min-height:4px}.item{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid #edf1f0;font-size:11px}.item:last-child{border-bottom:0}.item span{flex:1}.done span{text-decoration:line-through;color:#8a989a}
+.row{display:flex;gap:7px;margin-top:9px}.new{flex:1;border:1px solid var(--line);border-radius:9px;padding:10px;font:inherit;font-size:11px;outline:none}.new:focus,.qfield input:focus{border-color:#9db2ae}
+.btn{border:1px solid #d5e0de;background:#fff;color:#365766;border-radius:9px;padding:9px 12px;cursor:pointer;font:inherit;font-size:11px}.btn:hover{background:var(--ink);color:#fff}
+.del{border:0;background:none;color:#9aa6a7;cursor:pointer;font-size:16px}.empty{font-size:10px;color:#9aa6a7;padding:8px 0}
+.qlog{margin-top:14px}.qsub{font-size:9px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:4px}
+.qsum,.qcards{display:grid;gap:10px}.qsum{grid-template-columns:repeat(5,1fr);margin:12px 0}.qcards{grid-template-columns:repeat(3,1fr)}
+.qstat,.qcard{border:1px solid var(--line);border-radius:12px;background:#fbfcfb;padding:12px}.qstat label{font-size:8px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted)}.qstat b{display:block;font-size:20px;margin-top:4px}
+.qcard h3{font:500 18px Georgia,serif;margin:0 0 11px}.qfields{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.qfield label{display:block;font-size:8px;margin-bottom:4px}.qfield input{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px;font:inherit;background:#fff;outline:none}.qhint{font-size:9px;color:#8a989a;margin-top:9px}
+.help{font-size:9px;color:#8a989a;margin-top:10px}.foot{font-size:9px;color:#8a989a;margin-top:12px}
+@media(max-width:800px){.top{flex-direction:column;align-items:start}.summary,.targets{grid-template-columns:1fr}.qsum,.qcards{grid-template-columns:1fr 1fr}.qfields{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){body{padding:10px}.qsum,.qcards{grid-template-columns:1fr}h1{font-size:30px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+<div><div class="eyebrow">NEET 2027 / PLANNING</div><h1>Monthly Targets</h1><div class="sub">Targets + Question Log · month-wise independent data</div></div>
+<input id="month" class="month" type="month" aria-label="Select month">
+</header>
+
+<section class="summary">
+<div class="stat"><label>Monthly Progress</label><b id="pct">0%</b><div class="bar"><i id="bar"></i></div></div>
+<div class="stat"><label>Total Targets</label><b id="total">0</b></div>
+<div class="stat"><label>Completed</label><b id="done">0</b></div>
+<div class="stat"><label>Remaining</label><b id="rem">0</b></div>
 </section>
-<div class="foot">Every month has its own independent targets and question log. Changing the month never overwrites another month.</div></div><script>
-var subjects=["Physics","Physical Chemistry","Organic Chemistry","Inorganic Chemistry","Zoology","Botany","Tests"],month=document.getElementById("month"),grid=document.getElementById("grid");
-function K(){return "neet_monthly_targets_v1_"+month.value} function esc(s){return String(s).replace(/[&<>"]/g,function(m){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]})}
-function load(){var d={};try{d=JSON.parse(localStorage.getItem(K())||"{}")}catch(e){} grid.innerHTML="";subjects.forEach(function(s){var arr=Array.isArray(d[s])?d[s]:[],card=document.createElement("section");card.className="card";card.innerHTML="<h2>"+esc(s)+"</h2><div class='items'></div><div class='row'><input class='new' placeholder='Add a monthly target'><button class='btn'>Add</button></div>";var items=card.querySelector(".items");arr.forEach(function(x,i){var el=document.createElement("div");el.className="item"+(x.done?" done":"");el.innerHTML="<input type='checkbox' "+(x.done?"checked":"")+"><span>"+esc(x.text)+"</span><button class='del'>×</button>";el.querySelector("input").onchange=function(){d[s][i].done=this.checked;save(d);load()};el.querySelector(".del").onclick=function(){d[s].splice(i,1);save(d);load()};items.appendChild(el)});var input=card.querySelector(".new");card.querySelector(".btn").onclick=function(){var text=input.value.trim();if(!text)return;d[s]=arr;d[s].push({text:text,done:false});save(d);load()};input.onkeydown=function(e){if(e.key==="Enter")card.querySelector(".btn").click()};grid.appendChild(card)});update()}
-function save(d){localStorage.setItem(K(),JSON.stringify(d))}
-function update(){var n=0,d=0;document.querySelectorAll(".item").forEach(function(x){n++;if(x.querySelector("input").checked)d++});var p=n?Math.round(d/n*100):0;document.getElementById("pct").textContent=p+"%";document.getElementById("bar").style.width=p+"%";document.getElementById("total").textContent=n;document.getElementById("done").textContent=d;document.getElementById("rem").textContent=n-d}
-var now=new Date();month.value=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0");month.onchange=load;load();window.addEventListener("storage",load);
+
+<main id="targets" class="targets"></main>
+
+<section class="qlog">
+<h2>Question Log</h2>
+<div class="qsub" id="qmonth">Selected month · Physics · Chemistry · Biology</div>
+<div class="qsum" id="qsum"></div>
+<div class="qcards" id="qcards"></div>
+<div class="help">Questions = total questions. Correct + Incorrect + Skipped should equal Questions; the log will show the difference if it does not.</div>
+</section>
+<div class="foot">Each month is stored separately. Changing the month does not overwrite another month's targets or question log.</div>
+</div>
+
 <script>
-var qsubs=["Physics","Chemistry","Biology"];
-function qK(){return "neet_question_log_v1_"+month.value}
-function qLoad(){var d={};try{d=JSON.parse(localStorage.getItem(qK())||"{}")}catch(e){};var wrap=document.getElementById("qcards");wrap.innerHTML="";
-qsubs.forEach(function(s){var x=d[s]||{},card=document.createElement("section");card.className="qcard";card.innerHTML="<h3>"+s+"</h3><div class='qfields'></div><div class='qhint'>Accuracy —</div>";var f=card.querySelector(".qfields");
-["questions","correct","incorrect","skipped"].forEach(function(k){var z=document.createElement("div");z.className="qfield";z.innerHTML="<label>"+k+"</label><input type='number' min='0' inputmode='numeric' value='"+(Number(x[k])||0)+"'>";z.querySelector("input").oninput=function(){d[s]=d[s]||{};d[s][k]=Math.max(0,Number(this.value)||0);localStorage.setItem(qK(),JSON.stringify(d));qUpdate()};f.appendChild(z)});wrap.appendChild(card)});qUpdate()}
-function qUpdate(){var T=0,C=0,W=0,S=0;qsubs.forEach(function(s){var card=document.getElementById("qcards").children[qsubs.indexOf(s)],v=card.querySelectorAll("input"),q=Number(v[0].value)||0,c=Number(v[1].value)||0,w=Number(v[2].value)||0,sk=Number(v[3].value)||0,att=Math.max(0,q-sk);T+=q;C+=c;W+=w;S+=sk;card.querySelector(".qhint").textContent=att?"Attempted "+att+" · Accuracy "+(c/att*100).toFixed(1)+"%":"Accuracy —"});var att=Math.max(0,T-S);document.getElementById("qsum").innerHTML="<div class='qstat'><label>Total</label><b>"+T+"</b></div><div class='qstat'><label>Correct</label><b>"+C+"</b></div><div class='qstat'><label>Incorrect</label><b>"+W+"</b></div><div class='qstat'><label>Skipped</label><b>"+S+"</b></div><div class='qstat'><label>Accuracy</label><b>"+(att?(C/att*100).toFixed(1)+"%":"—")+"</b></div>"}
-var oldMonthChange=month.onchange;month.onchange=function(){load();qLoad()};qLoad();window.addEventListener("storage",function(){load();qLoad()});
-</script></body></html>
+const subjects=["Physics","Physical Chemistry","Organic Chemistry","Inorganic Chemistry","Zoology","Botany","Tests"];
+const qsubs=["Physics","Chemistry","Biology"];
+const month=document.getElementById("month");
+
+function targetKey(){return "neet_monthly_targets_v2_"+month.value}
+function questionKey(){return "neet_question_log_v2_"+month.value}
+function esc(s){return String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]))}
+function read(key){try{return JSON.parse(localStorage.getItem(key)||"{}")}catch(e){return {}}}
+function write(key,data){localStorage.setItem(key,JSON.stringify(data))}
+
+function renderTargets(){
+ const data=read(targetKey()),wrap=document.getElementById("targets");wrap.innerHTML="";
+ subjects.forEach(subject=>{
+   const arr=Array.isArray(data[subject])?data[subject]:[];
+   const card=document.createElement("section");card.className="subject";
+   card.innerHTML='<div class="subject-head"><h2>'+esc(subject)+'</h2><span class="count">'+arr.filter(x=>x.done).length+' / '+arr.length+' done</span></div><div class="items"></div><div class="row"><input class="new" placeholder="Add target for '+esc(subject)+'"><button class="btn">Add</button></div>';
+   const items=card.querySelector(".items");
+   if(!arr.length)items.innerHTML='<div class="empty">No target added yet.</div>';
+   arr.forEach((item,index)=>{
+     const el=document.createElement("div");el.className="item"+(item.done?" done":"");
+     el.innerHTML='<input type="checkbox" '+(item.done?"checked":"")+'><span>'+esc(item.text)+'</span><button class="del" aria-label="Delete target">×</button>';
+     el.querySelector("input").onchange=e=>{data[subject][index].done=e.target.checked;write(targetKey(),data);renderTargets()};
+     el.querySelector(".del").onclick=()=>{data[subject].splice(index,1);write(targetKey(),data);renderTargets()};
+     items.appendChild(el);
+   });
+   const input=card.querySelector(".new");
+   card.querySelector(".btn").onclick=()=>addTarget(subject,input);
+   input.onkeydown=e=>{if(e.key==="Enter")addTarget(subject,input)};
+   wrap.appendChild(card);
+ });
+ updateSummary(data);
+}
+
+function addTarget(subject,input){
+ const text=input.value.trim();if(!text)return;
+ const data=read(targetKey());if(!Array.isArray(data[subject]))data[subject]=[];
+ data[subject].push({text,done:false});write(targetKey(),data);renderTargets();
+}
+
+function updateSummary(data){
+ let total=0,done=0;
+ subjects.forEach(s=>(Array.isArray(data[s])?data[s]:[]).forEach(x=>{total++;if(x.done)done++}));
+ const pct=total?Math.round(done/total*100):0;
+ document.getElementById("pct").textContent=pct+"%";
+ document.getElementById("bar").style.width=pct+"%";
+ document.getElementById("total").textContent=total;
+ document.getElementById("done").textContent=done;
+ document.getElementById("rem").textContent=total-done;
+}
+
+function renderQuestions(){
+ const data=read(questionKey()),cards=document.getElementById("qcards");cards.innerHTML="";
+ document.getElementById("qmonth").textContent="Selected month · "+month.value+" · Physics · Chemistry · Biology";
+ qsubs.forEach(subject=>{
+   const x=data[subject]||{questions:0,correct:0,incorrect:0,skipped:0};
+   const card=document.createElement("section");card.className="qcard";
+   card.innerHTML='<h3>'+subject+'</h3><div class="qfields"></div><div class="qhint"></div>';
+   const fields=card.querySelector(".qfields");
+   [["questions","Questions"],["correct","Correct"],["incorrect","Incorrect"],["skipped","Skipped"]].forEach(([key,label])=>{
+      const box=document.createElement("div");box.className="qfield";
+      box.innerHTML='<label>'+label+'</label><input type="number" min="0" step="1" inputmode="numeric" value="'+(Number(x[key])||0)+'">';
+      box.querySelector("input").oninput=e=>{
+        const next=read(questionKey());if(!next[subject])next[subject]={};
+        next[subject][key]=Math.max(0,Math.floor(Number(e.target.value)||0));write(questionKey(),next);updateQuestionSummary();
+      };
+      fields.appendChild(box);
+   });
+   cards.appendChild(card);
+ });
+ updateQuestionSummary();
+}
+
+function updateQuestionSummary(){
+ let T=0,C=0,I=0,S=0;
+ qsubs.forEach(subject=>{
+   const card=[...document.querySelectorAll(".qcard")].find(c=>c.querySelector("h3").textContent===subject);
+   if(!card)return;
+   const v=[...card.querySelectorAll("input")].map(x=>Number(x.value)||0);
+   const q=v[0],c=v[1],i=v[2],s=v[3],attempted=Math.max(0,q-s);
+   T+=q;C+=c;I+=i;S+=s;
+   const diff=q-(c+i+s);
+   card.querySelector(".qhint").textContent=attempted?"Attempted "+attempted+" · Accuracy "+(c/attempted*100).toFixed(1)+"%"+(diff?" · Difference "+diff:""):"No questions logged";
+ });
+ const attempted=Math.max(0,T-S),diff=T-(C+I+S);
+ document.getElementById("qsum").innerHTML=
+ '<div class="qstat"><label>Total Questions</label><b>'+T+'</b></div>'+
+ '<div class="qstat"><label>Correct</label><b>'+C+'</b></div>'+
+ '<div class="qstat"><label>Incorrect</label><b>'+I+'</b></div>'+
+ '<div class="qstat"><label>Skipped</label><b>'+S+'</b></div>'+
+ '<div class="qstat"><label>Accuracy</label><b>'+(attempted?(C/attempted*100).toFixed(1)+"%":"—")+'</b></div>';
+}
+
+function setDefaultMonth(){
+ const now=new Date();
+ month.value=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0");
+}
+function renderAll(){renderTargets();renderQuestions()}
+month.onchange=renderAll;
+setDefaultMonth();
+renderAll();
+window.addEventListener("storage",renderAll);
+</script>
+</body>
+</html>
