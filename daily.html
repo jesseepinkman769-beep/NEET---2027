@@ -210,7 +210,7 @@ input:focus,select:focus{border-color:#9fb1ba;box-shadow:0 0 0 3px #edf2f3}
         <button onclick="resetAll()" title="Reset this day's entire tracker" aria-label="Reset this day's entire tracker" style="width:auto;padding:0 10px;font-size:11px;letter-spacing:.08em">↻ RESET</button>
       </div>
       <div class="dayline">
-        <span>DAY <b id="dayNo">01</b> / 220</span>
+        <span>DAY <b id="dayNo">01</b> / 213</span>
         <div class="target-time">
           <label>TODAY'S TARGET</label><br>
           <input id="todayTarget" class="edit-value" value="08:00" aria-label="Today's target">
@@ -344,7 +344,7 @@ input:focus,select:focus{border-color:#9fb1ba;box-shadow:0 0 0 3px #edf2f3}
 const dateInput=document.getElementById('date');
 const dayNo=document.getElementById('dayNo');
 const taskBody=document.getElementById('taskBody');
-const base=new Date('2026-09-26T00:00:00');
+const base=new Date('2026-10-01T00:00:00');
 // Versioned storage prevents data from older tracker builds from appearing on every date.
 const STORAGE_PREFIX='neetTracker_v4_';
 
@@ -696,7 +696,7 @@ function reportText(){
   const wrong=document.getElementById('qWrong').value||0;
   const skipped=document.getElementById('qSkipped').value||0;
   return `NEET 2027 — DAILY STUDY REPORT
-Day ${currentDay()} / 220 • ${dateText}
+Day ${currentDay()} / 213 • ${dateText}
 
 TARGET: ${document.getElementById('todayTarget').value}
 TOTAL STUDY: ${document.getElementById('totalStudy').value}
@@ -735,7 +735,7 @@ function buildShareFile(){
   clone.querySelectorAll('.share-actions,.add,.remove,.empty-note,.footer').forEach(el=>el.remove());
   clone.querySelectorAll('.nav button').forEach(btn=>btn.remove());
   const dateText=new Date(dateInput.value+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
-  const stamp=`<div style="text-align:center;font:11px Inter,Arial,sans-serif;letter-spacing:.12em;color:#607482;margin:8px 0 14px">DAY ${currentDay()} / 220 • ${dateText}</div>`;
+  const stamp=`<div style="text-align:center;font:11px Inter,Arial,sans-serif;letter-spacing:.12em;color:#607482;margin:8px 0 14px">DAY ${currentDay()} / 213 • ${dateText}</div>`;
   const page=clone.querySelector('.page');
   if(page) page.insertAdjacentHTML('afterbegin',stamp);
   const style=clone.querySelector('style');
